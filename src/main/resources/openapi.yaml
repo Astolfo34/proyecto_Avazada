@@ -5,9 +5,11 @@ info:
 servers:
 - url: /
 paths:
+#-----------------------inicio de los endpoints para users-------------------------------------------
   /users:
     post:
       operationId: registerUser
+      security: [ ]
       requestBody:
         content:
           application/json:
@@ -49,18 +51,18 @@ paths:
       summary: Registrar un nuevo usuario
       x-content-type: application/json
       x-accepts:
-      - application/json
+        - application/json
   /users/{id}/password:
     patch:
       operationId: updateUserPassword
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
@@ -112,22 +114,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Servicio no disponible
       security:
-      - BearerAuth: []
+        - BearerAuth: [ ]
       summary: Actualizar la contraseña de un usuario
       x-content-type: application/json
       x-accepts:
-      - application/json
+        - application/json
   /users/{id}:
     delete:
       operationId: deleteUser
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
@@ -167,17 +169,17 @@ paths:
           description: Servicio no disponible
       summary: Eliminar Usuario
       x-accepts:
-      - application/json
+        - application/json
     get:
       operationId: getUser
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "201":
           content:
@@ -217,17 +219,17 @@ paths:
           description: Servicio no disponible
       summary: Busqueda del Usuario Especificado
       x-accepts:
-      - application/json
+        - application/json
     put:
       operationId: updateUser
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
@@ -275,37 +277,37 @@ paths:
       summary: Actualizar usuario
       x-content-type: application/json
       x-accepts:
-      - application/json
+        - application/json
   /users/list:
     get:
       operationId: busquedaUsers
       parameters:
-      - description: numero de pagina buscado y presentado
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          default: 1
-          type: integer
-        style: form
-      - description: tamaño de datos por pagina
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          default: 10
-          type: integer
-        style: form
-      - description: usuario BUSCADO
-        explode: true
-        in: query
-        name: searchUser
-        required: false
-        schema:
-          type: string
-        style: form
+        - description: numero de pagina buscado y presentado
+          explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            type: integer
+          style: form
+        - description: tamaño de datos por pagina
+          explode: true
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 10
+            type: integer
+          style: form
+        - description: usuario BUSCADO
+          explode: true
+          in: query
+          name: searchUser
+          required: false
+          schema:
+            type: string
+          style: form
       responses:
         "200":
           content:
@@ -337,9 +339,201 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Servicio no disponible
-      summary: Busqueda de USUARIOS usando paginacion
-      x-accepts:
-      - application/json
+          summary: Busqueda de USUARIOS usando paginacion
+          x-content-type:
+          x-accepts:
+            - application/json
+#--------------------- fin de los endpoints para users---------------------------------------------
+  #-------------------Inicio de los endpoints para reportes--------------------------------------
+  /v1/reports:
+    post:
+      operationId: registerReport
+      description: create a new report
+      tags:
+        - reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reportRequest' # para la creacion del reporte
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+          description: report register without problems
+        "400":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+                type: array
+          description: Data of entrance are invalid
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: email itś already registered
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Intern Error of server
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: the service are not available
+        x-content-type: application/json
+        x-accepts:
+          - application/json
+  /v1/reports/{id}:
+    get:
+      summary: obtain a report using your id
+      description: retorn the information of specific report
+      tags:
+        - reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: reporte encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        "404":
+          description: reporte no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: error interno en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: elimina un reporte por id
+      description: delete a report using your id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: reporte eliminado con exito
+        "404":
+          description: reporte no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: actualiza un rfeporte de forma parcial
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      responses:
+        "200":
+          description: reporte acctializado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        "400":
+          description: la solicitud es incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: el reporte no se ha encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: ha ocurrido un error del servidor
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+#------------------------------ fin de los endpoints para reportes---------------------------------
+#-------------------------------inicio de los endpoints para comentarios--------------------
+  /v1/reports/{reporteId}/comentarios:
+    post:
+      summary: creacion de un nuevo comentario en un reporte
+      parameters:
+        - name: reporteId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentariosRequest'
+      responses:
+        "201":
+          description: comentario creado con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioResponse'
+        "400":
+          description: solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: comentario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "501":
+          description: error en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: obtain a list of comments that are a report
+
+      responses:
+
+#-------------------------------fin de los endpoints para comentarios
 components:
   schemas:
     UserRegistration:
@@ -396,6 +590,7 @@ components:
       - newPassword
       type: object
     SuccessResponse:
+      description: marcar accion realizada exitosamente
       example:
         message: Contraseña actualizada exitosamente
       properties:
@@ -502,8 +697,58 @@ components:
             $ref: '#/components/schemas/UserResponse'
           type: array
       type: object
+    reportRequest:
+      type: object
+      required:
+        -title
+        -category
+        -location
+      properties:
+        title:
+          type: string
+          example: fire in the school
+        category:
+          type: string
+          enum:
+            -SEGURIDAD
+            -EMERGENCIAS_MEDICAS
+            -INFRAESTRUCTURA
+            -SOBRE_COMUNIDAD
+            -MASCOTAS
+        location:
+          $ref: '#/components/schemas/Location'
+        image:
+          type: string
+          format: binary
+          example: image.jpg
+    Location:
+      type: object
+      properties:
+        latitud:
+          type: number
+          format: double
+          example: 48.987
+        longitud:
+          type: number
+          format: double
+          example: -78.007
+    reportResponse:
+      allOf: #definimos un arreglo de requisitos a cumplir para validar el reporte
+        - $ref : '#/components/schemas/reportRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: rep123
+            dateCreation:
+              type: string
+              format: date-time
+              example: "2025-03-14T12:00:00Z"
+
+
+  #----------------TERMINATE OF DEFINITION OF THIS SCHEME
   securitySchemes:
     BearerAuth:
-      bearerFormat: JWT
-      scheme: bearer
       type: http
+      scheme: bearer
+      bearerFormat: JWT
