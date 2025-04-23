@@ -21,7 +21,7 @@ public record UserRegistration (@NotBlank(message = "Este campo es requerido")
                                 @NotNull (message = "La fecha es requerida")
                                 @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
                                 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-                                LocalDate dateBirth,
+                                LocalDate dateBirth,    //MANEJAR DENTRO DE LA LOGICA DE NEGOCIO EL OBTENER LA FECHA EN TIEMPO ACTUAL AUTOMATIC
                                 Rol rol) {
     public UserRegistration {
         rol = Objects.requireNonNullElse(rol, Rol.USERDEFAULT);
