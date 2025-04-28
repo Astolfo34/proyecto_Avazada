@@ -1,41 +1,43 @@
 package com.uniquindio.sebas.guia5.doamin;
 
-import jakarta.persistence.*;
+import com.uniquindio.sebas.guia5.doamin.Rol;
+import com.uniquindio.sebas.guia5.doamin.UserStatus;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
-//ADD METHODS FOR ADMINISTRATION OF THE CLASS USING LOMBOK DEPENDENCIES
-@Entity
-@Table(name = "users")
-@NoArgsConstructor     // sometimes isn't sufficient with only builder constructor, is necessary other patterns
-@AllArgsConstructor
+/**
+ * ENTIDAD DEFINIDA COMO LA ESTRUCTURA PARA LOS REGISTROS DE LOS OBJETOS
+ * EN LA BASE DE DATOS, DE ESTA MANERA RELACIONARSE CON LOS MAPPERS QUE TRANSFORMARAN
+ * LA INFORMACION EN OBJETOS DTO.
+ */
 
+// ADD METHODS FOR ADMINISTRATION OF THE CLASS USING LOMBOK DEPENDENCIES
+@Document(collection = "users")  // Indica que esta clase se mapeará a la colección 'users' en MongoDB
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
 public class User {
 
-    /**
-     * ENTIDAD DEFINIDA COMO LA ESTRUCTURA PARA LOS REGISTROS DE LOS OBJETOS
-     * EN LA BASE DE DATOS, DE ESTA MANERA RELACIONARSE CON LOS MAPPERS QUE TRANSFORMARAN
-     * LA INFORMACION EN OBJETOS DTO.
-     */
-
     // PRINCIPALS ATTRIBUTES  OF THE CLASS
-    @Column(nullable = false, length = 100)
+
     private String fullName;
 
-    @Id                                                   //used to change id in form auto-incremental in BD
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  //but id have been in type Long, because GV works with numeric camps
+    @Id // Mongo usa este @Id para identificar documentos
     private String id;
 
-    @Column(nullable = false, length = 150, unique = true)
     private String email;
 
     private String password;
+
     private LocalDate dateBirth;
+
     private Rol rolUser;
-    private UserStatus stateUser;  //IMPLEMENTATION OF CLAS FOR STATE OF USERS
+
+    private UserStatus stateUser; // IMPLEMENTATION OF CLASS FOR STATE OF USERS
 }
 
