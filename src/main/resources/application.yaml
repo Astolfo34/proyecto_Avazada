@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
+      uri: mongodb://localhost:27017/Avanzada
 # configuracion de springboot para conectarse a la base de datos local que se creara usando MySQL
 # Astolfo3S@  --PASSWORD MYSQL FEDORA
 #Aviso Es MongoDB spring:

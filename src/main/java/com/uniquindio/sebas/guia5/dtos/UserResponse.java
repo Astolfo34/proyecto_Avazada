@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
+
 public record UserResponse(@NotBlank (message = "El campo es requerido")
                            String id,
                            @NotBlank(message = "El campo es requerido")
