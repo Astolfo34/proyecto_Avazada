@@ -1,18 +1,25 @@
 package com.uniquindio.sebas.guia5.doamin;
 
-import jakarta.persistence.*;
+import com.uniquindio.sebas.guia5.doamin.Rol;
+import com.uniquindio.sebas.guia5.doamin.UserStatus;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
 import java.util.List;
 
-//ADD METHODS FOR ADMINISTRATION OF THE CLASS USING LOMBOK DEPENDENCIES
+/**
+ * ENTIDAD DEFINIDA COMO LA ESTRUCTURA PARA LOS REGISTROS DE LOS OBJETOS
+ * EN LA BASE DE DATOS, DE ESTA MANERA RELACIONARSE CON LOS MAPPERS QUE TRANSFORMARAN
+ * LA INFORMACION EN OBJETOS DTO.
+ */
 
-@Table(name = "users")
-@NoArgsConstructor     // sometimes isn't sufficient with only builder constructor, is necessary other patterns
+// ADD METHODS FOR ADMINISTRATION OF THE CLASS USING LOMBOK DEPENDENCIES
+@Document(collection = "users")  // Indica que esta clase se mapeará a la colección 'users' en MongoDB
+@NoArgsConstructor
 @AllArgsConstructor
-
 @Getter
 @Setter
 @Builder
@@ -26,11 +33,10 @@ public class User {
 
     // PRINCIPALS ATTRIBUTES  OF THE CLASS
     private String fullName;
-    @Id                                                   //used to change id in form auto-incremental in BD
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)  //but id have been in type Long, because GV works with numeric camps
+
+    @Id // Mongo usa este @Id para identificar documentos
     private String id;
 
-    @Column(nullable = false, length = 150, unique = true)
     private String email;
     private String password;
     private LocalDate dateBirth;
