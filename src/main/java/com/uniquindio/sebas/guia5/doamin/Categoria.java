@@ -1,23 +1,22 @@
 package com.uniquindio.sebas.guia5.doamin;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("imagenes")
-@EqualsAndHashCode
+
+@Document("categorias")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-
-public class Imagen {
-
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Categoria {
     @Id
     @EqualsAndHashCode.Include
     private String id;
-    private String ruta;
-    private String nombre;
-
+    private String name;
+    private String description;
 }
