@@ -36,5 +36,15 @@ public class UserServicesImpl implements UserServices{
         return  Optional.ofNullable(userStore.get(id)).map(userMapper::toUserResponse);
     }
 
+    @Override
+    public Optional<UserResponse> updateUser(String id, UserRegistration request) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean deleteUser(String id) {
+        return false;
+    }
+
 
 }

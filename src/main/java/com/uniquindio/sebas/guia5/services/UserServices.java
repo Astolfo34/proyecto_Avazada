@@ -21,6 +21,6 @@ public interface UserServices {
 
     UserResponse createUser(UserRegistration user);// we gonna create a user catching a DTO that are requesting , and return a DTO that are resolving
     Optional<UserResponse> getUser(String id);     // look an user by id , are optional if the user don't exist
-
-
+    Optional<UserResponse> updateUser(String id, UserRegistration request);
+    boolean deleteUser(String id);
 }
