@@ -1,0 +1,1198 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  version: 1.0.0
+servers:
+- url: /
+paths:
+#---NUMERO COMPAÑERO : 316 781 50 33 DAVID CLAVIJO
+#-----------------------inicio de los endpoints para users-------------------------------------------
+  /users:
+    post:
+      operationId: registerUser
+      security: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: Usuario registrado exitosamente
+        "400":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+                type: array
+          description: Datos de entrada inválidos
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Correo ya registrado
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno del servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+      summary: Registrar un nuevo usuario
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+  /users/{id}/password:
+    patch:
+      operationId: updateUserPassword
+      parameters:
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordUpdate'
+          description: Contraseña actualizada exitosamente
+        "400":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+                type: array
+          description: Datos de entrada inválidos
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No autorizado
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Prohibido (sin permisos suficientes)
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Usuario no encontrado
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno del servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+      security:
+        - BearerAuth: [ ]
+      summary: Actualizar la contraseña de un usuario
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+  /users/{id}:
+    delete:
+      operationId: deleteUser
+      parameters:
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutAfterDeleteUsers'
+          description: usuario eliminado correctamente
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: usuario no autorizado
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Prohibido (sin permisos suficientes)
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Usuario no encontrado
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno en el servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+      summary: Eliminar Usuario
+      x-accepts:
+        - application/json
+    get:
+      operationId: getUser
+      parameters:
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: Usuario encontrado
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: usuario no autorizado
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Prohibido (sin permisos suficientes)
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Usuario no encontrado
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno en el servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+      summary: Busqueda del Usuario Especificado
+      x-accepts:
+        - application/json
+    put:
+      operationId: updateUser
+      parameters:
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserPUT'
+        description: Datos del usuario a actualizar
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+          description: usuario actualizado correctamente
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: usuario no autorizado
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Prohibido (sin permisos suficientes)
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Usuario no encontrado
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno en el servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+      summary: Actualizar usuario
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+  /users/list:
+    get:
+      operationId: busquedaUsers
+      summary:  Busqueda de USUARIOS usando paginacion
+      parameters:
+        - description: numero de pagina buscado y presentado
+          explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            type: integer
+          style: form
+        - description: tamaño de datos por pagina
+          explode: true
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 10
+            type: integer
+          style: form
+        - description: usuario BUSCADO
+          explode: true
+          in: query
+          name: searchUser
+          required: false
+          schema:
+            type: string
+          style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePagenatedUsers'
+          description: busqueda realizada con exito
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: usuario no autorizado
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Prohibido (sin permisos suficientes)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error interno en el servidor
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Servicio no disponible
+          x-content-type:
+          x-accepts:
+            - application/json
+#--------------------- fin de los endpoints para users---------------------------------------------
+  #-------------------Inicio endpoints para autenticacion de cuentas-----------------------------
+  /v1/auth/activate:
+    post:
+      summary: activate account of user
+      description: using a code of activation, active account of user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateAccountRequest'
+      responses:
+        "200":
+          description: account is already activated
+        "400":
+          description: invalid request
+        "404":
+          description: user not found
+
+  /v1/auth/recover-password:
+    post:
+      summary: request for recover the password
+      description: sending a code to account user, recover the password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoverPasswordRequest'
+      responses:
+        "200":
+          description: email of recover send correctly
+        "400":
+          description: invalid request
+        "404":
+          description: user not found
+
+  /v1/auth/reset-password:
+    post:
+      summary: reset password of user
+      description: using code of recover , change the password of user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        "200":
+          description: correctly reset password
+        "400":
+          description: invalid request
+        "404":
+          description: user not found
+
+  #-------------------fin para endpoints de autenticacion de cuentas-----------------------------
+  #-------------------inicio para endpoints  de notificaciones-----------------------------------
+  /v1/notifications:
+    get:
+      tags:
+        - Notifications
+      summary: obtain notifications
+      description: list of notifications of the user logged
+      parameters:
+        - name: page
+          in: query
+          description: pages of notifications than are views
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: length of lists notifications than will be show
+          schema:
+            type: integer
+            default: 10
+        - name: read
+          in: query
+          schema:
+            type: boolean
+          description: filtered fot reads and not reads
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/NotificationType'
+          description: filtered por el tipo de notification
+      responses:
+        "200":
+          description: list of notifications obtain correctly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageListNotificationsResponse'
+        "401":
+          description: no autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+        - Notifications
+      summary: set notifications como reads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notificationsId:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        "204":
+          description: notifications updated
+  /v1/notifications/unread-count:
+    get:
+      tags:
+        - Notifications
+      summary: obtain the cont of notifications unread
+      responses:
+        "200":
+          description: count of notifications unread
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 8
+
+
+
+
+  #-------------------fin para endpoints  de notificaciones--------------------------------------
+  #-------------------Inicio de los endpoints para reportes--------------------------------------
+  /v1/reports:
+    post:
+      operationId: registerReport
+      tags:
+        - reports
+      security:
+        - BearerAuth: [ ]
+      summary: create a new report
+      description: Only authenticated users can creat a new report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest' # para la creacion del reporte
+      responses:
+        "201":
+          description: report register without problems
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        "400":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+                type: array
+          description: Data of entrance are invalid
+        "409":
+          description: report is DUPLICATE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Intern Error of server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: the service are not available
+        x-content-type: application/json
+        x-accepts:
+          - application/json
+    get:
+      summary: obtain list of reports
+      description: obtain the reports for list
+      parameters:
+        - name: page
+          in: query
+          description: number of page, started in 1
+          schema:
+            type: integer
+            default: 0
+            maximum: 1
+        - name: size
+          in: query
+          description: size of results for page
+          schema:
+            type: integer
+            default: 10
+            maximum: 30
+        - name: category
+          in: query
+          schema:
+            $ref: '#/components/schemas/Category'
+      responses:
+        "200":
+          description: list of reports
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReportsRequest'
+
+  /v1/reports/{reportId}:
+    get:
+      summary: obtain a report using your id
+      description: retorn the information of specific report
+      tags:
+        - reports
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: reporte encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        "404":
+          description: reporte no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: error interno en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: elimina un reporte por id
+      description: delete a report using your id
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: reporte eliminado con exito
+        "404":
+          description: reporte no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: actualiza un rfeporte de forma parcial
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportUpdateRequest' #de esta forma def los campos actualizables
+      responses:
+        "200":
+          description: reporte acctializado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        "400":
+          description: la solicitud es incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: el reporte no se ha encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: ha ocurrido un error del servidor
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+#------------------------------ fin de los endpoints para reportes---------------------------------
+#-------------------------------inicio de los endpoints para comentarios--------------------
+  /v1/reports/{reportId}/comentarios:
+    parameters:
+      - name: reportId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: creacion de un nuevo comentario en un reporte
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PagenatedCommentsResponse'
+      responses:
+        "201":
+          description: comentario creado con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioResponse'
+        "400":
+          description: solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: comentario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "501":
+          description: error en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: obtain a list of comments that are a report
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: list of comments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentariosRequest'
+
+#-------------------------------fin de los endpoints para comentarios
+components:
+  schemas:
+    UserRegistration:
+      example:
+        password: password
+        fullName: fullName
+        dateBirth: 1990-01-01
+        email: email
+        rol: user
+      properties:
+        email:
+          format: email
+          type: string
+        password:
+          description: "La contraseña del usuario (debe contener al menos un dígito,\
+            \ una mayúscula y una minúscula)"
+          minLength: 8
+          pattern: "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$"
+          type: string
+        fullName:
+          maxLength: 100
+          type: string
+        dateBirth:
+          example: 1990-01-01
+          format: date
+          type: string
+        rol:
+          default: user
+          enum:
+          - user
+          - admin
+          type: string
+      required:
+      - email
+      - fullName
+      - password
+      type: object
+    PasswordUpdate:
+      example:
+        newPassword: newPassword
+        currentPassword: currentPassword
+      properties:
+        currentPassword:
+          description: Contraseña actual del usuario
+          type: string
+        newPassword:
+          description: "Nueva contraseña del usuario (debe contener al menos un dí\
+            gito, una mayúscula y una minúscula)"
+          minLength: 8
+          pattern: "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$"
+          type: string
+      required:
+      - currentPassword
+      - newPassword
+      type: object
+    SuccessResponse:
+      description: marcar accion realizada exitosamente
+      example:
+        message: Contraseña actualizada exitosamente
+      properties:
+        message:
+          example: Contraseña actualizada exitosamente
+          type: string
+      required:
+      - message
+      type: object
+    UserResponse:
+      example:
+        fullName: fullName
+        id: id
+        dateBirth: 2000-01-23
+        email: email
+        rol: rol
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        dateBirth:
+          format: date
+          type: string
+        rol:
+          type: string
+      required:
+      - email
+      - fullName
+      - id
+      - rol
+      type: object
+    ErrorResponse:
+      example:
+        error: error
+        message: message
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+      - error
+      - message
+      type: object
+    OutAfterDeleteUsers:
+      example:
+        message: El usuario se ha eliminado con exito
+      properties:
+        message:
+          example: El usuario se ha eliminado con exito
+          type: string
+      type: object
+    UpdateUserPUT:
+      example:
+        datebirth: 2000-01-23
+        fullname: fullname
+      properties:
+        fullname:
+          maxLength: 80
+          type: string
+        datebirth:
+          format: date
+          type: string
+        telefono:
+          maxLength: 13
+          type: string
+        direccion:
+          maxLength: 30
+          type: string
+        imagen_perfil:
+          type: string
+          example: "cadena base 64"
+        ubicacion:
+          type: object
+          $ref: "#/components/schemas/Location"
+      required:
+      - fullname
+      - datebirth
+      - telefono
+      - direccion
+      - imagen_perfil
+      - ubicacion
+      type: object
+    ResponsePagenatedUsers:
+      example:
+        totalUsers: 5
+        size: 0
+        totalPages: 1
+        page: 6
+        users:
+        - fullName: fullName
+          id: id
+          dateBirth: 2000-01-23
+          email: email
+          rol: rol
+        - fullName: fullName
+          id: id
+          dateBirth: 2000-01-23
+          email: email
+          rol: rol
+      properties:
+        size:
+          description: cantidad de datos mostrados actuales
+          type: integer
+        page:
+          description: numero de pagina mostrado actualmente
+          type: integer
+        totalPages:
+          description: cantidad de paginas totales
+          type: integer
+        totalUsers:
+          description: numero total de usuarios existentes
+          type: integer
+        users:
+          description: usuarios totales en el sistema
+          items:
+            $ref: '#/components/schemas/UserResponse'
+          type: array
+      type: object
+    ReportRequest:
+      type: object
+      required:
+        - reportId
+        - title
+        - category
+        - location
+        - image
+        - date
+        - content
+      properties:
+        reportId:
+          type: string
+          format: uuid
+          description: in unique of report
+        title:
+          type: string
+          example: fire in the school
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        location:
+          $ref: '#/components/schemas/Location'
+        image:
+          type: string
+          format: binary
+          maxLength: 5242880  # 5MB
+          pattern: "^.*\\.(jpg|png)$"
+          example: image.jpg
+        date:
+          type: string
+          format: date-time
+          description: date when user post a report
+        content:
+          type: string
+          description: description of content of report that user make
+    Location:
+      type: object
+      properties:
+        latitud:
+          type: number
+          format: double
+          example: 48.987
+        longitud:
+          type: number
+          format: double
+          example: -78.007
+    Category:
+      type: object
+      description: category of report
+      enum:
+        - SEGURIDAD
+        - EMERGENCIAS_MEDICAS
+        - INFRAESTRUCTURA
+        - SOBRE_COMUNIDAD
+        - MASCOTAS
+    reportResponse:
+      allOf: #definimos un arreglo de requisitos a cumplir para validar el reporte
+        - $ref : '#/components/schemas/ReportRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: rep123
+            dateCreation:
+              type: string
+              format: date-time
+              example: "2025-03-14T12:00:00Z"
+    PaginatedReportsRequest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/reportResponse'
+          description: list of reports requests
+        page:
+          type: object
+          properties:
+            number:
+              type: integer
+              description: number of actual page
+            size:
+              type: integer
+              description: length of the list
+            totalElements:
+              type: integer
+              description: total of reports are on
+            totalPages:
+              type: integer
+              description: total of pages are on
+          required:
+            - number
+            - size
+            - totalElements
+            - totalPages
+      required:
+        - content
+        - page
+    PagenatedCommentsResponse:
+      description: schema for paginated comments
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComentarioResponse'
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 10
+
+    ReportUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: new title of report
+        description:
+          type: string
+          description: content of report
+        status:
+          type: string
+          description: state actually of report
+        occurrenceDate:
+          type: string
+          format: date-time
+          description: date of report when occurrence
+        location:
+          $ref: '#/components/schemas/Location'
+        photo:
+          type: string
+          format: uri
+          description: url of the photo of report
+        categories:
+          type: array
+          description: list of categories that report have
+          items:
+            $ref: '#/components/schemas/Category'
+    ComentariosRequest:
+      type: object
+      properties:
+        authorId:
+          type: string
+          description: id of user than make a comment
+        content:
+          type: string
+          description: message in the comment
+        dateComment:
+          type: string
+          format: date-time
+          description: date when user make at comment
+      required:
+        - authorId
+        - content
+    ComentarioResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: id of comment
+        author:
+          type: object
+          properties:
+            id:
+              type: string
+              description: id of user than make comment
+            name:
+              type: string
+              description: name of user than make comment
+          required:
+            - id
+            - name
+        reportId:
+          type: string
+          description: id of report of comment was make
+        content:
+          type: string
+          description: content of comment make at report
+        dateCreated:
+          type: string
+          format: date-time
+          description: date time that was created the comment
+      required:
+        - id
+        - author
+        - reportId
+        - content
+        - dateCreated
+    ActivateAccountRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: email to activate account
+        activationCode:
+          type: integer
+          example: 3214
+          description: code for activation account
+      required:
+        - email
+        - activationCode
+    RecoverPasswordRequest:
+      type: object
+      description: request util for send a code to recover at the email for recover
+      properties:
+        email:
+          type: string
+          format: email
+          description: email for recover the password
+      required:
+        - email
+    ResetPasswordRequest:
+      type: object
+      description: request util for reset the password of email
+      properties:
+        email:
+          type: string
+          format: email
+          description: email using for reset pass of the user
+        resetCode:
+          type: integer
+          description: code send to email for reset the password
+        newPassword:
+          $ref: '#/components/schemas/PasswordUpdate'
+      required:
+        - email
+        - resetCode
+        - newPassword
+    PageListNotificationsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationDTO'
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 10
+        totalElements:
+          type: integer
+          example: 50
+        totalPages:
+          type: integer
+          example: 5
+        last:
+          type: boolean
+          example: false
+    NotificationType:
+      type: string
+      enum:
+        - REPORT_APPROVED
+        - REPORT_REJECTED
+        - REPORT_DELETED
+        - NEW_COMMENT
+        - REPORT_UPDATED
+        - ADMIN_ANNOUNCEMENT
+    NotificationDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        message:
+          type: string
+          example: "tu reporte #212 fue aprobado "
+        relatedReportId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        read:
+          type: boolean
+          example: false
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Token de autenticación JWT. Debe ser incluido en el encabezado de autorización de la solicitud.
+        Ejemplo: `Authorization: Bearer <token>`
