@@ -848,9 +848,25 @@ components:
         datebirth:
           format: date
           type: string
+        telefono:
+          maxLength: 13
+          type: string
+        direccion:
+          maxLength: 30
+          type: string
+        imagen_perfil:
+          type: string
+          example: "cadena base 64"
+        ubicacion:
+          type: object
+          $ref: "#/components/schemas/Location"
       required:
-      - datebirth
       - fullname
+      - datebirth
+      - telefono
+      - direccion
+      - imagen_perfil
+      - ubicacion
       type: object
     ResponsePagenatedUsers:
       example:
