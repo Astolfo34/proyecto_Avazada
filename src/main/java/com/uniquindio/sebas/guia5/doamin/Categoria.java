@@ -1,8 +1,8 @@
 package com.uniquindio.sebas.guia5.doamin;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
