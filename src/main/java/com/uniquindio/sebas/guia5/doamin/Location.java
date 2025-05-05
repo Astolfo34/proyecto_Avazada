@@ -1,6 +1,5 @@
 package com.uniquindio.sebas.guia5.doamin;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
