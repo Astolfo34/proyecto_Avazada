@@ -1240,7 +1240,7 @@ components:
         activationCode:
           type: string
           description: "C\xF3digo de activaci\xF3n recibido por correo."
-          example: A3B5D9
+          example: 6742
     RecoverPasswordRequest:
       type: object
       description: "Datos para solicitar la recuperaci\xF3n de contrase\xF1a."
@@ -1287,6 +1287,7 @@ components:
       - location
       - occurrenceDate
       - content
+      - imageUrl
       properties:
         title:
           type: string
@@ -1318,6 +1319,11 @@ components:
           maxLength: 2000
           example: "Se observ\xF3 humo denso saliendo del bosque detr\xE1s de la escuela\
             \ primaria local..."
+        imageUrl:
+          type: string
+          description: "URL de la imagen principal asociada al reporte (si existe)."
+          format: uri
+          example: https://storage.example.com/reports/rep123_img1.jpg
     ReportResponse:
       type: object
       description: "Representaci\xF3n completa de un reporte ciudadano."

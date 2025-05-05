@@ -9,7 +9,18 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-
+/**
+ * Clase que representa la petición de registro de usuario
+ * @param email
+ * @param password
+ * @param fullname
+ * @param dateBirth
+ * @param rol
+ * @param direccion
+ * @param telefono
+ * @param imagenPerfil
+ * @param ubicacionUsuario
+ */
 public record UserRegistration (@NotBlank(message = "Este campo es requerido")
                                 @Email(message = "Debe contener un email valido")
                                 String email,
