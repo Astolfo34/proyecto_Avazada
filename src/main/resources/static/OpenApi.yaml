@@ -1490,7 +1490,7 @@ components:
       type: object
       description: "Representa una categor\xEDa de reporte."
       required:
-      - id
+      - idg
       - name
       properties:
         id:

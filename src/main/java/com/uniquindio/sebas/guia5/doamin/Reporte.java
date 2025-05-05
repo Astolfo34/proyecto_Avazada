@@ -1,9 +1,11 @@
 package com.uniquindio.sebas.guia5.doamin;
 
-import jakarta.persistence.*;
+
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,7 +15,7 @@ import java.util.List;
 
 
 
-@Table(name = "reportes")
+@Document("reportes")
 @NoArgsConstructor     // sometimes isn't sufficient with only builder constructor, is necessary other patterns
 @AllArgsConstructor
 @Getter
