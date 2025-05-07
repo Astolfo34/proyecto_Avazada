@@ -1,0 +1,1698 @@
+openapi: 3.0.0
+info:
+  title: API de Reportes Ciudadanos y Usuarios
+  description: API para gestionar usuarios, reportes ciudadanos, comentarios y notificaciones.
+  version: 1.0.0
+  contact:
+    name: Equipo de Desarrollo Avanzada
+    url: http://localhost:8080
+    email: jhons.alzatea@uqvirtual.edu.co
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://ejemplo.com/terminos
+servers:
+- url: /
+  description: Servidor Principal (Relativo)
+tags:
+- name: Users
+  description: Operaciones relacionadas con los usuarios
+- name: Authentication
+  description: "Operaciones de autenticaci\xF3n y activaci\xF3n de cuentas"
+- name: Reports
+  description: Operaciones relacionadas con los reportes ciudadanos
+- name: Comments
+  description: Operaciones sobre comentarios en los reportes
+- name: Notifications
+  description: Operaciones relacionadas con las notificaciones
+paths:
+  /v1/users:
+    post:
+      tags:
+      - Users
+      summary: Registrar un nuevo usuario
+      operationId: registerUser
+      security: []
+      requestBody:
+        description: Datos necesarios para el registro de un nuevo usuario.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: "Usuario registrado exitosamente y correo de activaci\xF3n\
+            \ enviado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: "Datos de entrada inv\xE1lidos."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: "El correo electr\xF3nico ya est\xE1 registrado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - Users
+      summary: Buscar u obtener lista paginada de usuarios
+      operationId: listOrSearchUsers
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: page
+        in: query
+        description: "N\xFAmero de p\xE1gina a obtener (basado en 0)."
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: "N\xFAmero de usuarios por p\xE1gina."
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: "T\xE9rmino de b\xFAsqueda (ej. por nombre o email)."
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lista paginada de usuarios obtenida correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsersResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (sin permisos suficientes).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/users/{userId}:
+    parameters:
+    - name: userId
+      in: path
+      required: true
+      description: "ID \xFAnico del usuario."
+      schema:
+        type: string
+        format: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+    get:
+      tags:
+      - Users
+      summary: "Obtener informaci\xF3n de un usuario espec\xEDfico"
+      operationId: getUserById
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Usuario encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (sin permisos suficientes).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Users
+      summary: "Actualizar informaci\xF3n de un usuario (Reemplazo completo)"
+      operationId: updateUserById
+      security:
+      - BearerAuth: []
+      requestBody:
+        description: Datos completos del usuario para actualizar. PUT reemplaza todo
+          el recurso.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Usuario actualizado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: "Datos de entrada inv\xE1lidos."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (sin permisos suficientes).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Users
+      summary: "Eliminar un usuario (Borrado l\xF3gico)"
+      operationId: deleteUserById
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Usuario eliminado (marcado como inactivo) correctamente.
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (sin permisos suficientes).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/users/{userId}/password:
+    patch:
+      tags:
+      - Users
+      summary: "Actualizar la contrase\xF1a de un usuario"
+      operationId: updateUserPassword
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: "ID \xFAnico del usuario cuya contrase\xF1a se actualizar\xE1\
+          ."
+        schema:
+          type: string
+          format: uuid
+        example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        description: "Contrase\xF1a actual y nueva contrase\xF1a."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordUpdate'
+      responses:
+        '200':
+          description: "Contrase\xF1a actualizada exitosamente."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: "Datos de entrada inv\xE1lidos (ej. contrase\xF1a actual incorrecta,\
+            \ nueva contrase\xF1a no cumple requisitos)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: "Prohibido (sin permisos suficientes, ej. intentando cambiar\
+            \ contrase\xF1a de otro usuario sin ser admin)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Servicio no disponible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/activate:
+    post:
+      tags:
+      - Authentication
+      summary: Activar cuenta de usuario
+      description: "Activa la cuenta de un usuario utilizando el c\xF3digo de activaci\xF3\
+        n enviado por correo."
+      operationId: activateAccount
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateAccountRequest'
+      responses:
+        '200':
+          description: Cuenta activada correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: "Solicitud inv\xE1lida (ej. c\xF3digo incorrecto, expirado\
+            \ o formato inv\xE1lido)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado o cuenta ya activada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/recover-password:
+    post:
+      tags:
+      - Authentication
+      summary: "Solicitar recuperaci\xF3n de contrase\xF1a"
+      description: "Inicia el proceso de recuperaci\xF3n de contrase\xF1a enviando\
+        \ un c\xF3digo al correo del usuario."
+      operationId: requestPasswordRecovery
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoverPasswordRequest'
+      responses:
+        '200':
+          description: "Correo de recuperaci\xF3n enviado correctamente."
+        '400':
+          description: "Solicitud inv\xE1lida (ej. formato de correo incorrecto)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: "Usuario no encontrado con ese correo electr\xF3nico."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor (ej. fallo al enviar correo).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/reset-password:
+    post:
+      tags:
+      - Authentication
+      summary: "Restablecer contrase\xF1a de usuario"
+      description: "Establece una nueva contrase\xF1a utilizando el c\xF3digo de recuperaci\xF3\
+        n recibido por correo."
+      operationId: resetPassword
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: "Contrase\xF1a restablecida correctamente."
+        '400':
+          description: "Solicitud inv\xE1lida (ej. c\xF3digo incorrecto/expirado,\
+            \ nueva contrase\xF1a no cumple requisitos)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: "Usuario no encontrado o c\xF3digo no v\xE1lido para ese usuario."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/notifications:
+    get:
+      tags:
+      - Notifications
+      summary: Obtener notificaciones del usuario autenticado
+      description: Devuelve una lista paginada de notificaciones para el usuario que
+        realiza la solicitud.
+      operationId: getNotifications
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: page
+        in: query
+        description: "N\xFAmero de p\xE1gina (basado en 0)."
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: "Tama\xF1o de la p\xE1gina."
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: read
+        in: query
+        description: "Filtrar por estado de lectura (true le\xEDdas, false  no le\xED\
+          das). Si no se especifica, devuelve todas."
+        schema:
+          type: boolean
+        required: false
+      - name: type
+        in: query
+        description: "Filtrar por tipo de notificaci\xF3n."
+        schema:
+          $ref: '#/components/schemas/NotificationType'
+        required: false
+      responses:
+        '200':
+          description: Lista paginada de notificaciones obtenida correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationsResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - Notifications
+      summary: "Marcar notificaciones como le\xEDdas"
+      description: "Actualiza el estado de una o varias notificaciones a 'le\xEDda'."
+      operationId: markNotificationsAsRead
+      security:
+      - BearerAuth: []
+      requestBody:
+        description: "Lista de IDs de las notificaciones a marcar como le\xEDdas."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - notificationIds
+              properties:
+                notificationIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: "IDs de las notificaciones a marcar como le\xEDdas."
+                  minItems: 1
+      responses:
+        '204':
+          description: "Notificaciones marcadas como le\xEDdas correctamente."
+        '400':
+          description: "Solicitud inv\xE1lida (ej. formato de ID incorrecto, lista\
+            \ vac\xEDa)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: "Una o m\xE1s notificaciones no encontradas o no pertenecen\
+            \ al usuario."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/notifications/unread-count:
+    get:
+      tags:
+      - Notifications
+      summary: "Obtener el n\xFAmero de notificaciones no le\xEDdas"
+      description: "Devuelve la cantidad total de notificaciones no le\xEDdas para\
+        \ el usuario autenticado."
+      operationId: getUnreadNotificationCount
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: "N\xFAmero de notificaciones no le\xEDdas."
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: "N\xFAmero total de notificaciones no le\xEDdas."
+                    example: 8
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/reports:
+    post:
+      operationId: createReport
+      tags:
+      - Reports
+      security:
+      - BearerAuth: []
+      summary: Crear un nuevo reporte ciudadano
+      description: Permite a un usuario autenticado crear un nuevo reporte.
+      requestBody:
+        description: Datos necesarios para crear un nuevo reporte.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '201':
+          description: Reporte creado exitosamente (estado inicial No Verificado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+        '400':
+          description: "Datos de entrada inv\xE1lidos."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflicto, posible reporte duplicado detectado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: "Servicio no disponible (ej. servicio de im\xE1genes o mapas)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - Reports
+      summary: Obtener lista paginada de reportes
+      description: Devuelve una lista de reportes ciudadanos, opcionalmente filtrada
+        y paginada.
+      operationId: listReports
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: page
+        in: query
+        description: "N\xFAmero de p\xE1gina (basado en 0)."
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: "Tama\xF1o de la p\xE1gina."
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: category
+        in: query
+        description: "Filtrar por ID o nombre de categor\xEDa."
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filtrar por estado del reporte (ej. VERIFIED, PENDING, RESOLVED).
+        required: false
+        schema:
+          type: string
+      - name: userId
+        in: query
+        description: "Filtrar por el ID del usuario que cre\xF3 el reporte."
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: proximityCoordinates
+        in: query
+        description: 'Coordenadas (lat,lon) para buscar reportes cercanos. Ej: 4.6,-74.08'
+        required: false
+        schema:
+          type: string
+          pattern: ^-?\d+(\.\d+)?,-?\d+(\.\d+)?$
+      - name: proximityRadiusKm
+        in: query
+        description: "Radio en kil\xF3metros para la b\xFAsqueda por proximidad (requiere\
+          \ proximityCoordinates)."
+        required: false
+        schema:
+          type: number
+          format: double
+          minimum: 0.1
+          default: 5.0
+      responses:
+        '200':
+          description: Lista paginada de reportes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReportsResponse'
+        '400':
+          description: "Par\xE1metros de consulta inv\xE1lidos."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/reports/{reportId}:
+    parameters:
+    - name: reportId
+      in: path
+      required: true
+      description: "ID \xFAnico del reporte."
+      schema:
+        type: string
+        format: uuid
+      example: 789a1234-b56c-78d9-e01f-234567890123
+    get:
+      summary: "Obtener un reporte espec\xEDfico por ID"
+      description: "Devuelve la informaci\xF3n detallada de un reporte ciudadano."
+      tags:
+      - Reports
+      operationId: getReportById
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Reporte encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (no tiene permisos para ver este reporte).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reporte no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Actualizar un reporte existente (parcialmente)
+      description: "Permite al creador del reporte o a un moderador actualizar campos\
+        \ espec\xEDficos del reporte."
+      tags:
+      - Reports
+      operationId: updateReportById
+      security:
+      - BearerAuth: []
+      requestBody:
+        description: Campos del reporte a actualizar. Solo se modifican los campos
+          incluidos.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportUpdateRequest'
+      responses:
+        '200':
+          description: Reporte actualizado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+        '400':
+          description: "Solicitud incorrecta o datos inv\xE1lidos."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (no tiene permisos para actualizar este reporte).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reporte no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: "Eliminar un reporte por ID (Borrado l\xF3gico)"
+      description: Marca un reporte como inactivo. Solo usuarios autorizados (ej.
+        creador o admin).
+      tags:
+      - Reports
+      operationId: deleteReportById
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: "Reporte eliminado (marcado como inactivo) con \xE9xito."
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Prohibido (no tiene permisos para eliminar este reporte).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reporte no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/reports/{reportId}/comments:
+    parameters:
+    - name: reportId
+      in: path
+      required: true
+      description: "ID \xFAnico del reporte al que pertenecen los comentarios."
+      schema:
+        type: string
+        format: uuid
+      example: 789a1234-b56c-78d9-e01f-234567890123
+    post:
+      tags:
+      - Comments
+      summary: Crear un nuevo comentario en un reporte
+      description: "Permite a un usuario autenticado a\xF1adir un comentario a un\
+        \ reporte espec\xEDfico."
+      operationId: createComment
+      security:
+      - BearerAuth: []
+      requestBody:
+        description: Contenido del nuevo comentario.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: "Comentario creado con \xE9xito."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '400':
+          description: "Solicitud incorrecta (ej. contenido vac\xEDo)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reporte no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - Comments
+      summary: Obtener comentarios de un reporte
+      description: "Devuelve una lista paginada de comentarios para un reporte espec\xED\
+        fico."
+      operationId: listCommentsByReportId
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: page
+        in: query
+        description: "N\xFAmero de p\xE1gina (basado en 0)."
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: "Tama\xF1o de la p\xE1gina."
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Lista paginada de comentarios.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommentsResponse'
+        '401':
+          description: No autorizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reporte no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      description: Datos para registrar un nuevo usuario.
+      required:
+      - email
+      - password
+      - fullName
+      properties:
+        email:
+          type: string
+          format: email
+          description: "Correo electr\xF3nico \xFAnico del usuario."
+          example: usuario@ejemplo.com
+        password:
+          type: string
+          format: password
+          description: "Contrase\xF1a del usuario (m\xEDnimo 8 caracteres, 1 d\xED\
+            gito, 1 min\xFAscula, 1 may\xFAscula)."
+          pattern: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$
+          minLength: 8
+          example: Password123
+        fullName:
+          type: string
+          description: Nombre completo del usuario.
+          minLength: 3
+          maxLength: 100
+          example: "Juan P\xE9rez Garc\xEDa"
+        dateBirth:
+          type: string
+          format: date
+          description: Fecha de nacimiento del usuario.
+          example: '1990-01-01'
+    UserResponse:
+      type: object
+      description: "Representaci\xF3n de un usuario registrado."
+      required:
+      - id
+      - email
+      - fullName
+      - rol
+      - dateBirth
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "ID \xFAnico del usuario."
+          example: 123e4567-e89b-12d3-a456-426614174000
+        email:
+          type: string
+          format: email
+          description: "Correo electr\xF3nico del usuario."
+          example: usuario@ejemplo.com
+        fullName:
+          type: string
+          description: Nombre completo del usuario.
+          example: "Juan P\xE9rez Garc\xEDa"
+        dateBirth:
+          type: string
+          format: date
+          description: "Fecha de nacimiento del usuario (puede ser nulo si no se proporcion\xF3\
+            )."
+          nullable: false
+          example: '1990-01-01'
+        rol:
+          type: string
+          description: Rol del usuario en el sistema.
+          enum:
+          - user
+          - admin
+          example: user
+    UserUpdateRequest:
+      type: object
+      description: Datos permitidos para actualizar un usuario (usado en PUT/PATCH).
+      properties:
+        fullName:
+          type: string
+          description: Nuevo nombre completo del usuario.
+          minLength: 3
+          maxLength: 100
+          example: "Juan Alberto P\xE9rez"
+        dateBirth:
+          type: string
+          format: date
+          description: Nueva fecha de nacimiento.
+          example: '1991-02-15'
+        phone:
+          type: string
+          description: "Nuevo n\xFAmero de tel\xE9fono."
+          maxLength: 20
+          example: '+573001234567'
+        address:
+          type: string
+          description: "Nueva direcci\xF3n de residencia."
+          maxLength: 200
+          example: Calle Falsa 123, Apto 4B
+        profileImageUrl:
+          type: string
+          format: uri
+          description: URL de la nueva imagen de perfil.
+          example: https://example.com/profiles/123.jpg
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Nuevas coordenadas de residencia.
+    PasswordUpdate:
+      type: object
+      description: "Datos para actualizar la contrase\xF1a."
+      required:
+      - currentPassword
+      - newPassword
+      properties:
+        currentPassword:
+          type: string
+          format: password
+          description: "Contrase\xF1a actual del usuario."
+          example: Password123
+        newPassword:
+          type: string
+          format: password
+          description: "Nueva contrase\xF1a (m\xEDnimo 8 caracteres, 1 d\xEDgito,\
+            \ 1 min\xFAscula, 1 may\xFAscula)."
+          pattern: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$
+          minLength: 8
+          example: NewPass456
+    PaginatedUsersResponse:
+      type: object
+      description: Respuesta paginada para la lista de usuarios.
+      required:
+      - content
+      - pageable
+      - totalPages
+      - totalElements
+      - size
+      - number
+      - first
+      - last
+      - empty
+      properties:
+        content:
+          type: array
+          description: "Lista de usuarios en la p\xE1gina actual."
+          items:
+            $ref: '#/components/schemas/UserResponse'
+        pageable:
+          type: object
+          description: "Informaci\xF3n sobre la paginaci\xF3n solicitada."
+          properties:
+            pageNumber:
+              type: integer
+              description: "N\xFAmero de p\xE1gina solicitado (basado en 0)."
+              example: 0
+            pageSize:
+              type: integer
+              description: "Tama\xF1o de p\xE1gina solicitado."
+              example: 10
+            sort:
+              type: object
+              properties:
+                sorted:
+                  type: boolean
+                  description: "Si la respuesta est\xE1 ordenada."
+                unsorted:
+                  type: boolean
+                  description: "Si la respuesta no est\xE1 ordenada."
+                empty:
+                  type: boolean
+                  description: "Si la info de ordenaci\xF3n est\xE1 vac\xEDa."
+            offset:
+              type: integer
+              format: int64
+              description: Offset calculado (page * size).
+              example: 0
+            paged:
+              type: boolean
+              description: Si la solicitud fue paginada.
+            unpaged:
+              type: boolean
+              description: Si la solicitud no fue paginada.
+        totalPages:
+          type: integer
+          description: "N\xFAmero total de p\xE1ginas disponibles."
+          example: 5
+        totalElements:
+          type: integer
+          format: int64
+          description: "N\xFAmero total de usuarios que coinciden con la consulta."
+          example: 42
+        size:
+          type: integer
+          description: "Tama\xF1o de la p\xE1gina actual."
+          example: 10
+        number:
+          type: integer
+          description: "N\xFAmero de la p\xE1gina actual (basado en 0)."
+          example: 0
+        sort:
+          type: object
+          properties:
+            sorted:
+              type: boolean
+            unsorted:
+              type: boolean
+            empty:
+              type: boolean
+        numberOfElements:
+          type: integer
+          description: "N\xFAmero de elementos devueltos en la p\xE1gina actual."
+          example: 10
+        first:
+          type: boolean
+          description: "Si esta es la primera p\xE1gina."
+          example: true
+        last:
+          type: boolean
+          description: "Si esta es la \xFAltima p\xE1gina."
+          example: false
+        empty:
+          type: boolean
+          description: "Si la p\xE1gina actual est\xE1 vac\xEDa."
+          example: false
+    ActivateAccountRequest:
+      type: object
+      description: Datos para activar una cuenta.
+      required:
+      - email
+      - activationCode
+      properties:
+        email:
+          type: string
+          format: email
+          description: "Correo electr\xF3nico de la cuenta a activar."
+          example: usuario@ejemplo.com
+        activationCode:
+          type: string
+          description: "C\xF3digo de activaci\xF3n recibido por correo."
+          example: A3B5D9
+    RecoverPasswordRequest:
+      type: object
+      description: "Datos para solicitar la recuperaci\xF3n de contrase\xF1a."
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: "Correo electr\xF3nico del usuario para enviar el c\xF3digo\
+            \ de recuperaci\xF3n."
+          example: usuario@ejemplo.com
+    ResetPasswordRequest:
+      type: object
+      description: "Datos para restablecer la contrase\xF1a usando un c\xF3digo."
+      required:
+      - email
+      - resetCode
+      - newPassword
+      properties:
+        email:
+          type: string
+          format: email
+          description: "Correo electr\xF3nico del usuario."
+          example: usuario@ejemplo.com
+        resetCode:
+          type: string
+          description: "C\xF3digo de recuperaci\xF3n recibido por correo."
+          example: R7Y9P1
+        newPassword:
+          type: string
+          format: password
+          description: "Nueva contrase\xF1a (m\xEDnimo 8 caracteres, 1 d\xEDgito,\
+            \ 1 min\xFAscula, 1 may\xFAscula)."
+          pattern: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$
+          minLength: 8
+          example: NewPass456
+    ReportRequest:
+      type: object
+      description: Datos para crear un nuevo reporte.
+      required:
+      - title
+      - categoryIds
+      - location
+      - occurrenceDate
+      - content
+      properties:
+        title:
+          type: string
+          description: "T\xEDtulo breve y descriptivo del reporte."
+          minLength: 5
+          maxLength: 150
+          example: Incendio forestal cerca de la escuela
+        categoryIds:
+          type: array
+          description: "Lista de IDs de las categor\xEDas asociadas al reporte."
+          items:
+            type: string
+          minItems: 1
+          example:
+          - SEGURIDAD
+          - INFRAESTRUCTURA
+        location:
+          $ref: '#/components/schemas/Location'
+          description: "Ubicaci\xF3n geogr\xE1fica donde ocurri\xF3 el incidente."
+        occurrenceDate:
+          type: string
+          format: date-time
+          description: "Fecha y hora aproximada en que ocurri\xF3 el incidente reportado."
+          example: '2025-04-27T10:00:00Z'
+        content:
+          type: string
+          description: "Descripci\xF3n detallada del incidente."
+          minLength: 10
+          maxLength: 2000
+          example: "Se observ\xF3 humo denso saliendo del bosque detr\xE1s de la escuela\
+            \ primaria local..."
+    ReportResponse:
+      type: object
+      description: "Representaci\xF3n completa de un reporte ciudadano."
+      required:
+      - id
+      - title
+      - categories
+      - location
+      - imageUrl
+      - occurrenceDate
+      - content
+      - createdBy
+      - createdAt
+      - status
+      - importanceCount
+      - commentCount
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "ID \xFAnico del reporte."
+          example: rep123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          description: "T\xEDtulo del reporte."
+          example: Incendio forestal cerca de la escuela
+        categories:
+          type: array
+          description: "Lista de categor\xEDas asociadas al reporte."
+          items:
+            $ref: '#/components/schemas/Category'
+        location:
+          $ref: '#/components/schemas/Location'
+        imageUrl:
+          type: string
+          format: uri
+          description: URL de la imagen principal asociada al reporte (si existe).
+          nullable: true
+          example: https://storage.example.com/reports/rep123_img1.jpg
+        occurrenceDate:
+          type: string
+          format: date-time
+          description: "Fecha y hora en que ocurri\xF3 el incidente."
+          example: '2025-04-27T10:00:00Z'
+        content:
+          type: string
+          description: "Descripci\xF3n detallada del incidente."
+          example: "Se observ\xF3 humo denso..."
+        createdBy:
+          type: object
+          properties:
+            userId:
+              type: string
+              format: uuid
+              description: "ID del usuario que cre\xF3 el reporte."
+            fullName:
+              type: string
+              description: "Nombre del usuario que cre\xF3 el reporte."
+          required:
+          - userId
+          - fullName
+        createdAt:
+          type: string
+          format: date-time
+          description: "Fecha y hora en que se cre\xF3 el reporte en el sistema."
+          example: '2025-04-27T10:30:00Z'
+        status:
+          type: string
+          description: Estado actual del reporte (PENDING, VERIFIED, REJECTED, RESOLVED).
+          enum:
+          - PENDING
+          - VERIFIED
+          - REJECTED
+          - RESOLVED
+          example: VERIFIED
+        importanceCount:
+          type: integer
+          format: int32
+          description: "N\xFAmero de usuarios que marcaron este reporte como importante."
+          example: 15
+        commentCount:
+          type: integer
+          format: int32
+          description: "N\xFAmero de comentarios en este reporte."
+          example: 3
+    ReportUpdateRequest:
+      type: object
+      description: Campos actualizables de un reporte (para PATCH).
+      properties:
+        title:
+          type: string
+          description: "Nuevo t\xEDtulo del reporte."
+          minLength: 5
+          maxLength: 150
+        content:
+          type: string
+          description: "Nueva descripci\xF3n detallada del reporte."
+          minLength: 10
+          maxLength: 2000
+        status:
+          type: string
+          description: Nuevo estado del reporte (usualmente cambiado por moderadores).
+          enum:
+          - PENDING
+          - RESOLVED
+        occurrenceDate:
+          type: string
+          format: date-time
+          description: Corregir la fecha y hora de ocurrencia del incidente.
+        location:
+          $ref: '#/components/schemas/Location'
+          description: "Corregir la ubicaci\xF3n del incidente."
+        imageUrl:
+          type: string
+          format: uri
+          description: Nueva URL de la imagen principal del reporte.
+          nullable: true
+        categoryIds:
+          type: array
+          description: "Nueva lista de IDs de categor\xEDas asociadas. Reemplaza la\
+            \ lista anterior."
+          items:
+            type: string
+          minItems: 1
+    PaginatedReportsResponse:
+      type: object
+      description: Respuesta paginada para la lista de reportes.
+      required:
+      - content
+      - pageable
+      - totalPages
+      - totalElements
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportResponse'
+          description: "Lista de reportes en la p\xE1gina actual."
+        pageable: null
+        totalPages: null
+        totalElements: null
+    Location:
+      type: object
+      description: "Coordenadas geogr\xE1ficas (Latitud, Longitud)."
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: "Latitud geogr\xE1fica."
+          example: 4.60971
+          minimum: -90.0
+          maximum: 90.0
+        longitude:
+          type: number
+          format: double
+          description: "Longitud geogr\xE1fica."
+          example: -74.08175
+          minimum: -180.0
+          maximum: 180.0
+    Category:
+      type: object
+      description: "Representa una categor\xEDa de reporte."
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: "Identificador \xFAnico de la categor\xEDa (podr\xEDa ser el\
+            \ mismo nombre en may\xFAsculas)."
+          example: SEGURIDAD
+        name:
+          type: string
+          description: "Nombre legible de la categor\xEDa."
+          example: Seguridad
+        description:
+          type: string
+          description: "Descripci\xF3n opcional de la categor\xEDa."
+          example: Reportes relacionados con robos, actividades sospechosas, etc.
+    CommentRequest:
+      type: object
+      description: Datos para crear un nuevo comentario.
+      required:
+      - content
+      properties:
+        content:
+          type: string
+          description: Contenido del comentario.
+          minLength: 1
+          maxLength: 1000
+          example: "Yo tambi\xE9n vi eso ayer por la tarde."
+    CommentResponse:
+      type: object
+      description: "Representaci\xF3n de un comentario en un reporte."
+      required:
+      - id
+      - author
+      - reportId
+      - content
+      - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "ID \xFAnico del comentario."
+          example: com987e4567-e89b-12d3-a456-426614174abc
+        author:
+          type: object
+          description: "Informaci\xF3n b\xE1sica del autor del comentario."
+          required:
+          - id
+          - name
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID del usuario autor.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            name:
+              type: string
+              description: Nombre del usuario autor.
+              example: "Juan P\xE9rez Garc\xEDa"
+        reportId:
+          type: string
+          format: uuid
+          description: ID del reporte al que pertenece el comentario.
+          example: rep123e4567-e89b-12d3-a456-426614174000
+        content:
+          type: string
+          description: Contenido del comentario.
+          example: "Yo tambi\xE9n vi eso ayer por la tarde."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Fecha y hora de creaci\xF3n del comentario."
+          example: '2025-04-27T11:05:00Z'
+    PaginatedCommentsResponse:
+      type: object
+      description: Respuesta paginada para la lista de comentarios.
+      required:
+      - content
+      - pageable
+      - totalPages
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+        pageable: null
+        totalPages: null
+    NotificationType:
+      type: string
+      description: "Tipo de notificaci\xF3n generada por el sistema."
+      enum:
+      - REPORT_APPROVED
+      - REPORT_REJECTED
+      - REPORT_DELETED
+      - NEW_COMMENT
+      - REPORT_UPDATED
+      - ADMIN_ANNOUNCEMENT
+      - NEW_NEARBY_REPORT
+      - REPORT_RESOLVED
+      - COMMENT_ON_OWN_REPORT
+    NotificationDTO:
+      type: object
+      description: "Representaci\xF3n de una notificaci\xF3n."
+      required:
+      - id
+      - type
+      - message
+      - createdAt
+      - read
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "ID \xFAnico de la notificaci\xF3n."
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        message:
+          type: string
+          description: "Mensaje de la notificaci\xF3n para el usuario."
+          example: Tu reporte 'Incendio forestal...' (#rep123) ha sido aprobado.
+        relatedEntityId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID de la entidad relacionada (ej. reporte, comentario) si aplica.
+          example: rep123e4567-e89b-12d3-a456-426614174000
+        createdAt:
+          type: string
+          format: date-time
+          description: "Fecha y hora de creaci\xF3n de la notificaci\xF3n."
+        read:
+          type: boolean
+          description: "Indica si la notificaci\xF3n ha sido le\xEDda por el usuario."
+          example: false
+    PaginatedNotificationsResponse:
+      type: object
+      description: Respuesta paginada para la lista de notificaciones.
+      required:
+      - content
+      - pageable
+      - totalPages
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationDTO'
+        pageable: null
+        totalPages: null
+    ErrorResponse:
+      type: object
+      description: "Respuesta de error gen\xE9rica."
+      required:
+      - timestamp
+      - status
+      - error
+      - message
+      - path
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: "Momento en que ocurri\xF3 el error."
+        status:
+          type: integer
+          format: int32
+          description: "C\xF3digo de estado HTTP."
+          example: 400
+        error:
+          type: string
+          description: "Descripci\xF3n corta del tipo de error (ej. Bad Request, Not\
+            \ Found)."
+          example: Bad Request
+        message:
+          type: string
+          description: Mensaje detallado sobre el error.
+          example: "El formato del correo electr\xF3nico es inv\xE1lido."
+        path:
+          type: string
+          description: "Ruta del endpoint que origin\xF3 el error."
+          example: /v1/users
+        validationErrors:
+          type: array
+          description: "Detalles espec\xEDficos de errores de validaci\xF3n (si aplica)."
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: "Campo que fall\xF3 la validaci\xF3n."
+                example: email
+              message:
+                type: string
+                description: "Mensaje de error de validaci\xF3n para ese campo."
+                example: must be a well-formed email address
+    SuccessResponse:
+      type: object
+      description: "Respuesta gen\xE9rica para operaciones exitosas sin contenido\
+        \ espec\xEDfico."
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: "Mensaje indicando el \xE9xito de la operaci\xF3n."
+          example: "Operaci\xF3n realizada exitosamente"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Token de autenticaci\xF3n JWT est\xE1ndar. Incluir en el encabezado\
+        \ `Authorization` como `Bearer <token>`. [cite: 125, 126]\n"
