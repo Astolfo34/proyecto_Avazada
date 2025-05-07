@@ -1,0 +1,131 @@
+flowchart TD
+subgraph Plataforma Ciudadana
+
+        %% --- Inicio y Acceso ---
+        Start[(Inicio)] --> LoginChoice{Usuario registrado?};
+
+        %% --- Flujo Cliente ---
+        subgraph Cliente
+            direction LR
+            LoginChoice -- No --> C_Register[1. Registrarse Datos básicos];
+            C_Register --> C_SendVerification[2. Sistema envía Email de Verificación];
+            C_SendVerification --> C_LoginAttempt1[3. Intento de Primer Login];
+            C_LoginAttempt1 --> C_EnterCode{4. Ingresar Código 15min validez};
+            C_EnterCode -- Código Válido --> C_Activate[5. Cuenta Activada];
+            C_EnterCode -- Código Inválido/Expirado --> C_SendVerification;
+            C_Activate --> C_Dashboard[6. Acceder a Panel Cliente];
+
+            LoginChoice -- Sí --> C_Login[1. Iniciar Sesión -Email/Pass-];
+            C_Login --> C_CheckActive{2. Cuenta Activada?};
+            C_CheckActive -- Sí --> C_Dashboard;
+            C_CheckActive -- No --> C_PromptActivate[3. Solicitar Código Activación];
+            C_PromptActivate --> C_EnterCode;
+
+            C_Login --> C_ForgotPassword{Olvidó Contraseña?};
+            C_ForgotPassword -- Sí --> C_ReqReset[Pedir Recuperación];
+            C_ReqReset --> C_SendResetCode[Sistema envía Código Reseteo -15min-];
+            C_SendResetCode --> C_EnterResetCode{Ingresar Código Reseteo};
+            C_EnterResetCode -- Válido --> C_SetNewPass[Establecer Nueva Contraseña];
+            C_SetNewPass --> C_Login;
+            C_EnterResetCode -- Inválido --> C_SendResetCode;
+            C_ForgotPassword -- No --> C_CheckActive;
+
+            %% --- Funciones Cliente ---
+            C_Dashboard --> C_ViewReports[Ver Reportes Comunidad -Mapa/Lista-];
+            C_Dashboard --> C_CreateReport[Crear Reporte -Título, Cat, Desc, Loc--Mapa-- , Img-];
+            C_CreateReport --> C_SaveUnverified[Reporte Guardado -No Verificado-];
+            C_SaveUnverified --> DB[(MongoDB)];
+            C_SaveUnverified --> C_NotifyNearby[Sistema Notifica Cercanos -Real-time/Email-];
+            C_NotifyNearby --> Notifications;
+
+            C_Dashboard --> C_ManageMyReports[Gestionar Mis Reportes];
+            C_ManageMyReports --> C_EditReport[Editar Reporte];
+            C_EditReport --> C_SaveUnverified;
+            C_ManageMyReports --> C_DeleteReport[Borrar Reporte -Lógico-];
+            C_DeleteReport --> DB;
+            C_ManageMyReports --> C_MarkResolved[Marcar como Resuelto];
+            C_MarkResolved --> DB_UpdateStatus[(Actualizar Estado + Historial)];
+
+            C_ViewReports --> C_Interact{Interactuar con Reporte};
+            C_Interact -- Ver Detalles --> C_ViewDetail[Ver Detalle Reporte];
+            C_Interact -- Comentar --> C_AddComment[Agregar Comentario];
+            C_AddComment --> DB;
+            C_AddComment --> C_NotifyOwner[Sistema Notifica Dueño Reporte -Email-];
+            C_Interact -- Marcar Importante --> C_MarkImportant['Me Gusta' -Importante-];
+            C_MarkImportant --> DB;
+
+            C_Dashboard --> C_ViewNotifications[Ver Lista Notificaciones];
+            C_ViewNotifications --> C_ViewDetailNotif[Ver Detalle desde Notif];
+
+            C_Dashboard --> C_EditProfile[Editar Datos Personales];
+            C_EditProfile --> DB;
+            C_Dashboard --> C_RequestDeletion[Solicitar Baja Cuenta -Lógico-];
+            C_RequestDeletion --> DB;
+        end
+
+        %% --- Flujo Administrador ---
+        subgraph AdministradorModerador
+             direction LR
+            Start --> A_Login[1. Iniciar Sesión Admin -Pre-cargado-];
+            A_Login --> A_Validate{2. Credenciales Válidas?};
+            A_Validate -- Sí --> A_Dashboard[3. Acceder a Panel Admin];
+            A_Validate -- No --> A_Login;
+
+            A_Login --> A_ForgotPassword{Olvidó Contraseña?};
+            A_ForgotPassword -- Sí --> A_ReqReset[Pedir Recuperación];
+            A_ReqReset --> A_SendResetCode[Sistema envía Código Reseteo -15min-];
+            A_SendResetCode --> A_EnterResetCode{Ingresar Código Reseteo};
+            A_EnterResetCode -- Válido --> A_SetNewPass[Establecer Nueva Contraseña];
+            A_SetNewPass --> A_Login;
+            A_EnterResetCode -- Inválido --> A_SendResetCode;
+            A_ForgotPassword -- No --> A_Validate;
+
+            %% --- Funciones Admin ---
+            A_Dashboard --> A_ManageReports[Gestionar Reportes Usuarios];
+            A_ManageReports --> A_ReviewReport{Revisar Reporte};
+            A_ReviewReport -- Verificar --> A_VerifyReport[Marcar como Verificado];
+            A_VerifyReport --> DB_UpdateStatus;
+            A_ReviewReport -- Rechazar --> A_RejectReport[Marcar como Rechazado + Motivo];
+            A_RejectReport --> DB_UpdateStatus;
+            A_RejectReport --> A_NotifyReject[Sistema Notifica Cliente -5 días para editar-];
+            A_NotifyReject --> Notifications;
+            A_ReviewReport -- Resolver --> A_ResolveReport[Marcar como Resuelto];
+            A_ResolveReport --> DB_UpdateStatus;
+            A_ReviewReport -- Eliminar -Excepcional- --> A_DeleteReport[Borrar Reporte -Lógico-];
+            A_DeleteReport --> DB;
+
+            A_Dashboard --> A_ManageCategories[Gestionar Categorías -CRUD-];
+            A_ManageCategories --> DB;
+
+            A_Dashboard --> A_GenerateReports[Generar Informes -Sector/Cat/Tiempo-];
+            A_GenerateReports --> A_DisplayReports[Mostrar en Web / Generar PDF];
+
+            A_Dashboard --> A_ManageOwnAccount[Gestionar Cuenta Propia -Editar/Eliminar-];
+            A_ManageOwnAccount --> DB;
+        end
+
+        %% --- Componentes/Servicios Clave ---
+        subgraph Servicios Externos '&' BD
+            direction RL
+            DB[(MongoDB \n -Usuarios \n -Reportes \n -Categorías \n -Comentarios \n -Historial Estados)]
+            MapService[Mapa -Mapbox \n Input Locación-];
+            ImageService[Servicio Imágenes -Cloudinary/S3/...-]
+            Notifications[Servicio Notificaciones \n -WebSockets/SSE/FCM, Email-]
+        end
+
+        %% --- Conexiones entre flujos y servicios ---
+        C_Register --> MapService;
+        C_CreateReport --> MapService;
+        C_CreateReport -- Guarda Imagen --> ImageService;
+        C_EditReport -- Actualiza Imagen --> ImageService;
+        C_SaveUnverified -- Registra Estado --> DB_UpdateStatus;
+        A_VerifyReport -- Registra Estado --> DB_UpdateStatus;
+        A_RejectReport -- Registra Estado --> DB_UpdateStatus;
+        A_ResolveReport -- Registra Estado --> DB_UpdateStatus;
+        C_MarkResolved -- Registra Estado --> DB_UpdateStatus;
+        DB_UpdateStatus --> DB;
+        C_NotifyNearby --> Notifications;
+        A_NotifyReject --> Notifications;
+        C_NotifyOwner --> Notifications;
+
+    end
