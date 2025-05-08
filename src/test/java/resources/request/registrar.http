@@ -22,4 +22,19 @@ Content-Type: application/json
   "dateBirth": "1990-05-12"
 }
 
-###
+### Crear un nuevo Reporte
+POST http://localhost:8080/v1/reports
+Content-Type: application/json
+
+{
+  "titulo": "Incendio en la Biblioteca",
+  "descripcion": "Se ha reportado un incendio en la biblioteca principal del campus.",
+  "listaCategorias": [],
+  "ubicacion": {
+    "latitud": 58.1234,
+    "longitud": 90.567
+  },
+  "userId": "2fed3342e-4a2b-8c3d-5f6e7d8e9f0a",
+  "fechaIncidente": "2023-05-15T08:00:00",
+  "estadoReporte": "EN_PROCESO"
+}
