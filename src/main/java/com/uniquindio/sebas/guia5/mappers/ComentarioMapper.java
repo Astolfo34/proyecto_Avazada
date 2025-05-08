@@ -15,7 +15,10 @@ public interface ComentarioMapper {
 
     @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")
     @Mapping(target = "fechaCreacion", expression = "java(LocalDateTime.now())")
+
+    //De DTO a entidad
     Comentario toEntity(ComentarioDTO dto);
 
+    //De entidad a DTO
     ComentarioResponse toResponse(Comentario comentario);
 }
