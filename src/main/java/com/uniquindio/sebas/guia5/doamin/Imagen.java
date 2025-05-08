@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("imagenes")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Imagen {
@@ -16,8 +16,7 @@ public class Imagen {
     @Id
     @EqualsAndHashCode.Include
     private String id;
-
     private String ruta;
     private String nombre;
-}
 
+}

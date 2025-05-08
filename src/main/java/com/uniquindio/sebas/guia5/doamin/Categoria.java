@@ -16,8 +16,6 @@ public class Categoria {
     @Id
     @EqualsAndHashCode.Include
     private String id;
-
     private String name;
     private String description;
 }
-
