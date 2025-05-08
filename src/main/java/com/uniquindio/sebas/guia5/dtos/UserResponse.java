@@ -6,14 +6,21 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-
+/**
+ * Clase que representa la respuesta de un usuario
+ * @param id
+ * @param email
+ * @param fullName
+ * @param dateBirth
+ * @param rol
+ */
 public record UserResponse(@NotBlank (message = "El campo es requerido")
                            String id,
                            @NotBlank(message = "El campo es requerido")
                            @Email(message = "ingrese un email valido")
                            String email,
                            @NotBlank(message = "El campo es necesario")
-                           @Pattern (regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$" , message = "Debe contener al menos 1 mayuscula y 1 minuscula")
+                           //@Pattern (regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$" , message = "Debe contener al menos 1 mayuscula y 1 minuscula")
                            @Size(max = 100, message = "No debe sobrepasar los 100 caracteres")
                            String fullName,
                            @NotNull(message = "la fecha no puede estar vacida")

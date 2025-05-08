@@ -24,7 +24,6 @@ public class Reporte {
     @Id
     @EqualsAndHashCode.Include
     private String id;
-
     private String titulo;
 
     @Field("lista categorias")
@@ -37,19 +36,17 @@ public class Reporte {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime fechaCreacion;
-
     private String descripcion;
-
     private ObjectId userId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime fechaIncidente;
 
     private EstadoReporte estadoReporte;
-
     @Field("lista Comentarios")
     @DBRef
     private List<Comentario> listaComentarios;
 
     private int contadorDeImportancia;
+
 }
