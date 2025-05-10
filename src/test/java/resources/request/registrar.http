@@ -1,8 +1,8 @@
-GET http://localhost:8080/users/7e51313a-d5dd-432f-b01f-54efb9a48f0e
+GET http://localhost:8080/v1/users/7e51313a-d5dd-432f-b01f-54efb9a48f0e
 Accept: application/json
 
 ###
-POST http://localhost:8080/users
+POST http://localhost:8080/v1/users
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Envío con fallas en la solicitud
-POST http://localhost:8080/users
+POST http://localhost:8080/v1/users
 Content-Type: application/json
 
 {
@@ -24,17 +24,47 @@ Content-Type: application/json
 
 ### Crear un nuevo Reporte
 POST http://localhost:8080/v1/reports
+Authorization: Basic usuario:contraseña  # Añade esto con credenciales válidas
 Content-Type: application/json
 
 {
   "titulo": "Incendio en la Biblioteca",
   "descripcion": "Se ha reportado un incendio en la biblioteca principal del campus.",
-  "listaCategorias": [],
+  "listaCategorias": ["343DEF"],
   "ubicacion": {
     "latitud": 58.1234,
     "longitud": 90.567
   },
-  "userId": "2fed3342e-4a2b-8c3d-5f6e7d8e9f0a",
   "fechaIncidente": "2023-05-15T08:00:00",
-  "estadoReporte": "EN_PROCESO"
+  "imagenReporte": {
+  }
+}
+
+### Autenticación para obtener token (ajusta con tus credenciales reales)
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@ejemplo.com",
+  "password": "Password123"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Crear un nuevo Reporte
+POST http://localhost:8080/v1/reports
+Content-Type: application/json
+
+{
+  "title": "Incendio en la Biblioteca",
+  "categoryIds": ["SEGURIDAD"],
+  "location": {
+    "latitude": 4.60971,
+    "longitude": -74.08175
+  },
+  "occurrenceDate": "2023-05-15T08:00:00Z",
+  "content": "Se ha reportado un incendio en la biblioteca principal del campus.",
+  "imageUrl": "https://ejemplo.com/imagen.jpg"
 }

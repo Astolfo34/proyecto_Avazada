@@ -10,7 +10,8 @@ import org.mapstruct.MappingConstants;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        imports = {java.util.UUID.class})
 public interface ComentarioMapper {
 
     @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")

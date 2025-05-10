@@ -12,12 +12,11 @@ import org.mapstruct.factory.Mappers;
 public interface LocationMapper {
 
     LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
-    @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")
+
     @Mapping(target = "latitud", source = "latitud", qualifiedByName = "stringToDouble")
     @Mapping(target = "longitud", source = "longitud", qualifiedByName = "stringToDouble")
     Location toEntity(LocationDTO dto);
 
-    @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")
     @Mapping(target = "latitud", source = "latitud", qualifiedByName = "doubleToString")
     @Mapping(target = "longitud", source = "longitud", qualifiedByName = "doubleToString")
     LocationDTO toDto(Location entity);

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-08T01:45:02-0500",
+    date = "2025-05-08T09:58:13-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
@@ -26,13 +26,13 @@ public class ReporteMapperImpl implements ReporteMapper {
         ReporteDTO.ReporteDTOBuilder reporteDTO = ReporteDTO.builder();
 
         reporteDTO.userId( ReporteMapper.objectIdToString( reporte.getUserId() ) );
+        reporteDTO.ubicacion( reporte.getUbicacion() );
         reporteDTO.id( reporte.getId() );
         reporteDTO.titulo( reporte.getTitulo() );
         List<Categoria> list = reporte.getListaCategorias();
         if ( list != null ) {
             reporteDTO.listaCategorias( new ArrayList<Categoria>( list ) );
         }
-        reporteDTO.ubicacion( reporte.getUbicacion() );
         reporteDTO.imagenReporte( reporte.getImagenReporte() );
         reporteDTO.fechaCreacion( reporte.getFechaCreacion() );
         reporteDTO.descripcion( reporte.getDescripcion() );
@@ -56,13 +56,13 @@ public class ReporteMapperImpl implements ReporteMapper {
         Reporte.ReporteBuilder reporte = Reporte.builder();
 
         reporte.userId( ReporteMapper.stringToObjectId( reporteDTO.getUserId() ) );
+        reporte.ubicacion( reporteDTO.getUbicacion() );
         reporte.id( reporteDTO.getId() );
         reporte.titulo( reporteDTO.getTitulo() );
         List<Categoria> list = reporteDTO.getListaCategorias();
         if ( list != null ) {
             reporte.listaCategorias( new ArrayList<Categoria>( list ) );
         }
-        reporte.ubicacion( reporteDTO.getUbicacion() );
         reporte.imagenReporte( reporteDTO.getImagenReporte() );
         reporte.fechaCreacion( reporteDTO.getFechaCreacion() );
         reporte.descripcion( reporteDTO.getDescripcion() );
