@@ -7,12 +7,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+imports = {java.util.UUID.class})
 public interface NotificacionMapper {
 
 
     @Mapping(target = "id",expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "tipo", source = "tipo")
+    @Mapping(target = "tipoNotificacion", source = "tipo")
     NotificationDTO toDto(Notificacion notificacion);
 
     Notificacion toEntity(NotificationDTO notificationDTO);

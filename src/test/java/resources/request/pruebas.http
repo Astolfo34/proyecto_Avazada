@@ -1,0 +1,54 @@
+### 1. Configurar autenticación básica primero (si es requerida)
+GET http://localhost:8080/
+Authorization: Basic admin:password
+
+### 2. Registrar nuevo usuario (sin autenticación)
+POST http://localhost:8080/v1/users
+Content-Type: application/json
+
+{
+  "email": "testuser@mail.com",
+  "password": "Test1234",
+  "fullName": "Usuario Test",
+  "dateBirth": "1990-01-01"
+}
+
+### 3. Login para obtener token
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@mail.com",
+  "password": "Test1234"
+}
+
+> {%
+    if (response.status === 200) {
+        client.global.set("auth_token", response.body.token);
+        client.log("Token obtenido: " + client.global.get("auth_token"));
+    } else {
+        client.log("Error en login: " + response.body);
+    }
+%}
+
+### 4. Consultar usuario (con token)
+GET http://localhost:8080/v1/users/7e51313a-d5dd-432f-b01f-54efb9a48f0e
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### 5. Crear reporte (con token)
+POST http://localhost:8080/v1/reports
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "Bache peligroso",
+  "categoryIds": ["INFRAESTRUCTURA"],
+  "location": {
+    "latitude": 4.60971,
+    "longitude": -74.08175
+  },
+  "occurrenceDate": "2025-05-15T14:30:00Z",
+  "content": "Bache de 1m de profundidad",
+  "imageUrl": null
+}
