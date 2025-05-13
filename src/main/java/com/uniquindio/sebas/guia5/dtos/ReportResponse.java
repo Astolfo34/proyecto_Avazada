@@ -1,9 +1,24 @@
 package com.uniquindio.sebas.guia5.dtos;
 
 import jakarta.validation.constraints.*;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
+import org.mapstruct.Builder;
 
 import java.util.List;
+
+/**
+ * clase que representa la respuesta de un reporte
+ * @param id
+ * @param title
+ * @param contenido
+ * @param image
+ * @param latitud
+ * @param longitud
+ * @param categoriasdIds
+ * @param fechaSuceso
+ * @param nombreUsuario
+ */
 
 public record ReportResponse(
         @NotNull(message = "el id es requerido")

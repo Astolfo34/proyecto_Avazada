@@ -1,22 +1,24 @@
 package com.uniquindio.sebas.guia5.services;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
+import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Servicio que define los métodos para la gestión de reportes.
  */
 public interface ReporteService {
 
-    ReporteDTO crearReporte(ReporteDTO reporteDTO);
+    ReportResponse crearReporte(ReporteDTO reporteDTO);
 
-    ReporteDTO actualizarReporte(String userId,ReporteDTO reporteDTO);
+    ReportResponse actualizarReporte(String userId,ReporteDTO reporteDTO);
 
     void eliminarReporte(String idReporte);
 
-    ReporteDTO obtenerReportePorId(String idReporte);
+    Optional<ReportResponse> obtenerReportePorId(String idReporte);
 
     List<ReporteDTO> listarTodosLosReportes();
 

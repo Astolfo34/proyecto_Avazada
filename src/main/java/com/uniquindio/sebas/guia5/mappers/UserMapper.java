@@ -13,8 +13,11 @@ public interface UserMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "stateUser", constant = "REGISTERED")
     @Mapping(target = "password", expression = "java(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode(userDTO.password()))")
-    @Mapping(target = "rolUser", source = "rol")  // Mapeo de rol en UserRegistration a rolUser en User
+    @Mapping(target = "rolUser", source = "rol")  // Mapeo de rol en UserRegistration a rolUser en User entidad
     @Mapping(target = "fullName", source = "fullname")
+    @Mapping(target = "telefono", source = "telefono")
+    @Mapping(target = "lista_Reportes", ignore = true)
+    @Mapping(target = "lista_notificaciones", ignore = true)
     User parseOf(UserRegistration userDTO);  // Mapeo de DTO a entidad User
 
     @Mapping(target = "rol", source = "rolUser")  // Mapeo de rolUser en User a rol en UserResponse

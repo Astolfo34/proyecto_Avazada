@@ -20,30 +20,30 @@ public class ReporteDTO {
     private String id;
 
     @NotBlank(message = "El título no puede estar vacío")
-    private String titulo;
+    private String title;
 
     @NotNull(message = "Las categorías no pueden ser nulas")
-    private List<Categoria> listaCategorias;
+    private List<Categoria> categories;
 
     @NotNull(message = "La ubicación no puede ser nula")
-    private Location ubicacion;
+    private Location location;
 
-    private Imagen imagenReporte;
+    private String imageUrl;
 
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime occurrenceDate;
 
     @NotBlank(message = "La descripción no puede estar vacía")
-    private String descripcion;
+    private String content;
 
     private String userId;
 
     @NotNull(message = "La fecha del incidente no puede ser nula")
-    private LocalDateTime fechaIncidente;
+    private LocalDateTime createdAt;
 
     @NotNull(message = "El estado del reporte no puede ser nulo")
-    private EstadoReporte estadoReporte;
+    private EstadoReporte status;
 
-    private List<Comentario> listaComentarios;
+    private List<Comentario> listComments;
 
-    private int contadorDeImportancia;
+    private int importanceCount;
 }

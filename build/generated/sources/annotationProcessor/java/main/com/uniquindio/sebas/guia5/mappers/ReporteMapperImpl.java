@@ -2,6 +2,7 @@ package com.uniquindio.sebas.guia5.mappers;
 
 import com.uniquindio.sebas.guia5.doamin.Categoria;
 import com.uniquindio.sebas.guia5.doamin.Comentario;
+import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
 import com.uniquindio.sebas.guia5.doamin.Reporte;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 import java.util.ArrayList;
@@ -11,41 +12,11 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-08T09:58:13-0500",
+    date = "2025-05-12T10:20:40-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
 public class ReporteMapperImpl implements ReporteMapper {
-
-    @Override
-    public ReporteDTO toDto(Reporte reporte) {
-        if ( reporte == null ) {
-            return null;
-        }
-
-        ReporteDTO.ReporteDTOBuilder reporteDTO = ReporteDTO.builder();
-
-        reporteDTO.userId( ReporteMapper.objectIdToString( reporte.getUserId() ) );
-        reporteDTO.ubicacion( reporte.getUbicacion() );
-        reporteDTO.id( reporte.getId() );
-        reporteDTO.titulo( reporte.getTitulo() );
-        List<Categoria> list = reporte.getListaCategorias();
-        if ( list != null ) {
-            reporteDTO.listaCategorias( new ArrayList<Categoria>( list ) );
-        }
-        reporteDTO.imagenReporte( reporte.getImagenReporte() );
-        reporteDTO.fechaCreacion( reporte.getFechaCreacion() );
-        reporteDTO.descripcion( reporte.getDescripcion() );
-        reporteDTO.fechaIncidente( reporte.getFechaIncidente() );
-        reporteDTO.estadoReporte( reporte.getEstadoReporte() );
-        List<Comentario> list1 = reporte.getListaComentarios();
-        if ( list1 != null ) {
-            reporteDTO.listaComentarios( new ArrayList<Comentario>( list1 ) );
-        }
-        reporteDTO.contadorDeImportancia( reporte.getContadorDeImportancia() );
-
-        return reporteDTO.build();
-    }
 
     @Override
     public Reporte toEntity(ReporteDTO reporteDTO) {
@@ -55,25 +26,49 @@ public class ReporteMapperImpl implements ReporteMapper {
 
         Reporte.ReporteBuilder reporte = Reporte.builder();
 
-        reporte.userId( ReporteMapper.stringToObjectId( reporteDTO.getUserId() ) );
-        reporte.ubicacion( reporteDTO.getUbicacion() );
-        reporte.id( reporteDTO.getId() );
-        reporte.titulo( reporteDTO.getTitulo() );
-        List<Categoria> list = reporteDTO.getListaCategorias();
+        reporte.location( reporteDTO.getLocation() );
+        reporte.title( reporteDTO.getTitle() );
+        reporte.content( reporteDTO.getContent() );
+        reporte.imageUrl( reporteDTO.getImageUrl() );
+        reporte.occurrenceDate( reporteDTO.getOccurrenceDate() );
+        List<Categoria> list = reporteDTO.getCategories();
         if ( list != null ) {
-            reporte.listaCategorias( new ArrayList<Categoria>( list ) );
+            reporte.categories( new ArrayList<Categoria>( list ) );
         }
-        reporte.imagenReporte( reporteDTO.getImagenReporte() );
-        reporte.fechaCreacion( reporteDTO.getFechaCreacion() );
-        reporte.descripcion( reporteDTO.getDescripcion() );
-        reporte.fechaIncidente( reporteDTO.getFechaIncidente() );
-        reporte.estadoReporte( reporteDTO.getEstadoReporte() );
-        List<Comentario> list1 = reporteDTO.getListaComentarios();
-        if ( list1 != null ) {
-            reporte.listaComentarios( new ArrayList<Comentario>( list1 ) );
-        }
-        reporte.contadorDeImportancia( reporteDTO.getContadorDeImportancia() );
+
+        reporte.id( java.util.UUID.randomUUID().toString() );
+        reporte.status( EstadoReporte.PENDIENTE );
 
         return reporte.build();
+    }
+
+    @Override
+    public ReporteDTO toDto(Reporte reporte) {
+        if ( reporte == null ) {
+            return null;
+        }
+
+        ReporteDTO.ReporteDTOBuilder reporteDTO = ReporteDTO.builder();
+
+        reporteDTO.id( reporte.getId() );
+        reporteDTO.title( reporte.getTitle() );
+        List<Categoria> list = reporte.getCategories();
+        if ( list != null ) {
+            reporteDTO.categories( new ArrayList<Categoria>( list ) );
+        }
+        reporteDTO.location( reporte.getLocation() );
+        reporteDTO.imageUrl( reporte.getImageUrl() );
+        reporteDTO.occurrenceDate( reporte.getOccurrenceDate() );
+        reporteDTO.content( reporte.getContent() );
+        reporteDTO.userId( reporte.getUserId() );
+        reporteDTO.createdAt( reporte.getCreatedAt() );
+        reporteDTO.status( reporte.getStatus() );
+        List<Comentario> list1 = reporte.getListComments();
+        if ( list1 != null ) {
+            reporteDTO.listComments( new ArrayList<Comentario>( list1 ) );
+        }
+        reporteDTO.importanceCount( reporte.getImportanceCount() );
+
+        return reporteDTO.build();
     }
 }
