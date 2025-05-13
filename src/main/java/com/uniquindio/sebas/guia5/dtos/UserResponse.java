@@ -1,10 +1,13 @@
 package com.uniquindio.sebas.guia5.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.uniquindio.sebas.guia5.doamin.Notificacion;
+import com.uniquindio.sebas.guia5.doamin.Reporte;
 import com.uniquindio.sebas.guia5.doamin.Rol;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Clase que representa la respuesta de un usuario

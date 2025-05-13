@@ -3,6 +3,7 @@ package com.uniquindio.sebas.guia5.controllers;
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 import com.uniquindio.sebas.guia5.services.ReporteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class ReporteController {
     private final ReporteService reporteService;
 
     @PostMapping
-    public ResponseEntity<ReporteDTO> crearReporte (@RequestBody ReporteDTO reporteDTO){
-        return new ResponseEntity<>(reporteService.crearReporte(reporteDTO), HttpStatus.CREATED);
+    public ResponseEntity<ReporteDTO> crearReporte (@Valid @RequestBody ReporteDTO reporteDTO){
+        return ResponseEntity.ok(reporteService.crearReporte(reporteDTO));
     }
 
     @PutMapping("/{reportId}")

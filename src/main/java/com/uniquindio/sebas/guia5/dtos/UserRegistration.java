@@ -40,7 +40,7 @@ public record UserRegistration (@NotBlank(message = "Este campo es requerido")
                                 @Size(max = 100, message = "la dirección no puede superar los 100 caracteres")
                                 String direccion,
                                 @NotBlank
-                                @Pattern(regexp = "^\\\\+?[0-9]{7,15}$", message = "el telefono debe estar en un formato valido, 7-15 digitos, opcionalmete un '+' al inicio")
+                                @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "el telefono debe estar en un formato valido, 7-15 digitos, opcionalmete un '+' al inicio")
                                 String telefono,
                                 @NotBlank(message = "la URL de la imagen no puede estar vacía")
                                 @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif)$", message = "La imagen de perfil debe ser una URL válida que termine en jpg, jpeg, png o gif")
