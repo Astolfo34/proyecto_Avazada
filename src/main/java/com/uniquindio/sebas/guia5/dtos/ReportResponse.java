@@ -1,5 +1,7 @@
 package com.uniquindio.sebas.guia5.dtos;
 
+import com.uniquindio.sebas.guia5.doamin.Categoria;
+import com.uniquindio.sebas.guia5.doamin.Location;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
@@ -13,16 +15,14 @@ import java.util.List;
  * @param title
  * @param contenido
  * @param image
- * @param latitud
- * @param longitud
- * @param categoriasdIds
+ * @param location
+ * @param categories
  * @param fechaSuceso
- * @param nombreUsuario
+ * @param userId
  */
-
 public record ReportResponse(
         @NotNull(message = "el id es requerido")
-        Long id,
+        String id,
         @NotNull
         @Size(min = 20,max = 150,message = "el titulo debe tener entre 20 y 150 caracteres")
         String title,
@@ -32,20 +32,13 @@ public record ReportResponse(
         @NotNull
         @URL
         String image,
-        @NotNull(message = "la latitud es requerida")
-        @DecimalMin(value = "-90",inclusive = true, message = "la latitud debe ser mayor a -90")
-        @DecimalMax(value = "90",inclusive = true, message = "la latitud debe ser menor a 90")
-        String latitud,
-        @NotNull(message = "la longitud es requerida")
-        @DecimalMin(value = "-180",inclusive = true, message = "la latitud debe ser mayor a -180")
-        @DecimalMax(value = "180",inclusive = true, message = "la latitud debe ser menor a 180")
-        String longitud,
+        Location location,
         @NotEmpty(message = "el arreglo de Ids de categorias es requerido")
         @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
-        List<Long> categoriasdIds,
+        List<Categoria> categories,
         @NotBlank(message = "la fecha del suceso es requerida")
         @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
         String fechaSuceso,
-        String nombreUsuario
+        String userId
 ) {
 }

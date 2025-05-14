@@ -1,6 +1,8 @@
 package com.uniquindio.sebas.guia5.controllers;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
+import com.uniquindio.sebas.guia5.dtos.ReportRequest;
+import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 import com.uniquindio.sebas.guia5.services.ReporteService;
 import jakarta.validation.Valid;
@@ -22,12 +24,12 @@ public class ReporteController {
     private final ReporteService reporteService;
 
     @PostMapping
-    public ResponseEntity<ReporteDTO> crearReporte (@Valid @RequestBody ReporteDTO reporteDTO){
+    public ResponseEntity<ReportResponse> crearReporte (@Valid @RequestBody ReportRequest reporteDTO){
         return ResponseEntity.ok(reporteService.crearReporte(reporteDTO));
     }
 
     @PutMapping("/{reportId}")
-    public ResponseEntity<ReporteDTO> actualizarReporte (@PathVariable String reportId, @RequestBody ReporteDTO reporteDTO){
+    public ResponseEntity<ReportResponse> actualizarReporte (@Valid @PathVariable String reportId, @RequestBody ReportRequest reporteDTO){
         return ResponseEntity.ok(reporteService.actualizarReporte(reportId,reporteDTO));
     }
 
@@ -37,22 +39,19 @@ public class ReporteController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{reportId}")
-    public ResponseEntity<ReporteDTO> obtenerReportePorId (@PathVariable String reportId){
+    public ResponseEntity<ReportResponse> obtenerReportePorId (@PathVariable String reportId){
         return  ResponseEntity.ok(reporteService.obtenerReportePorId(reportId));
     }
 
     @GetMapping
-    public ResponseEntity<List<ReporteDTO>> listarTodosLosReportes(){
+    public ResponseEntity<List<ReportResponse>> listarTodosLosReportes(){
         return ResponseEntity.ok(reporteService.listarTodosLosReportes());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReporteDTO>> listarReportesPorUsuario(@PathVariable String userId){
+    public ResponseEntity<List<ReportResponse>> listarReportesPorUsuario(@PathVariable String userId){
         return ResponseEntity.ok(reporteService.listarReportesPorUsuario(userId));
     }
 
-    @GetMapping("estadoReporte/{estadoReporte}")
-    public ResponseEntity<List<ReporteDTO>> listarReportesPorEstado(@PathVariable EstadoReporte estadoReporte){
-        return ResponseEntity.ok(reporteService.listarReportesPorEstado(estadoReporte));
-    }
+
 }

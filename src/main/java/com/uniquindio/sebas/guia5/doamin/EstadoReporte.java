@@ -7,5 +7,6 @@ public enum EstadoReporte {
     CERRADO,
     RECHAZADO,
     CANCELADO,
-    EN_ESPERA
+    EN_ESPERA,
+    ELIMINADO;
 }
