@@ -26,14 +26,6 @@ public record ReportRequest(
                             @NotNull(message = "la imagen es requerida")
                             @URL(message = "la imagen debe ser una URL valida")
                             String image,
-                            /*@NotNull(message = "la latitud es requerida")
-                            @DecimalMin(value = "-90",inclusive = true, message = "la latitud debe ser mayor a -90")
-                            @DecimalMax(value = "90",inclusive = true, message = "la latitud debe ser menor a 90")
-                            String latitud,
-                            @NotNull(message = "la longitud es requerida")
-                            @DecimalMin(value = "-180",inclusive = true, message = "la latitud debe ser mayor a -180")
-                            @DecimalMax(value = "180",inclusive = true, message = "la latitud debe ser menor a 180")
-                            String longitud,*/
                             @NotNull(message = "la ubicacion es requerida")
                             Location location,
                             @NotEmpty(message = "el arreglo de Ids de categorias es requerido")
@@ -44,7 +36,6 @@ public record ReportRequest(
                             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
                             @DateTimeFormat(pattern = "yyyy-MM-dd")
                             String fechaSuceso,
-                            @NotEmpty(message = "los comentarios son requeridos")
                             List<Comentario> listaComentarios,
                             String userId_creador,
                             Integer importanceCount,

@@ -1,0 +1,40 @@
+%%{init: {'theme': 'neutral', 'fontFamily': 'Arial'}}%%
+sequenceDiagram
+    participant Cliente as Cliente (Pruebas .http)
+    participant Controller as Controller (REST)
+    participant Service as Service (Lógica)
+    participant Repository as Repository (BD)
+    participant Mapper as Mapper (DTO ↔ Entidad)
+    participant GlobalExceptionHandler as GlobalExceptionHandler
+
+    Cliente->>Controller: POST /api/reportes (JSON Request)
+    activate Controller
+    Controller->>Mapper: Mapea JSON a DTO (ReportRequest)
+    Mapper-->>Controller: DTO válido
+    Controller->>Service: crearReporte(reporteDTO)
+    activate Service
+    Service->>Repository: save(entidad)
+    activate Repository
+    Repository-->>Service: Entidad guardada
+    deactivate Repository
+    Service->>Mapper: Mapea Entidad a DTO (ReportResponse)
+    Mapper-->>Service: DTO de respuesta
+    Service-->>Controller: ReportResponse
+    deactivate Service
+    Controller-->>Cliente: HTTP 200 (JSON Response)
+    deactivate Controller
+
+    alt Error de Validación (@Valid)
+        Controller->>GlobalExceptionHandler: MethodArgumentNotValidException
+        GlobalExceptionHandler-->>Cliente: HTTP 400 + JSON (ErrorResponse)
+    end
+
+    alt Error de Negocio (ValueConflict)
+        Service->>GlobalExceptionHandler: ValueConflictException
+        GlobalExceptionHandler-->>Cliente: HTTP 409 + JSON (ErrorResponse)
+    end
+
+    alt Error Inesperado
+        Service->>GlobalExceptionHandler: Exception
+        GlobalExceptionHandler-->>Cliente: HTTP 500 + JSON (ErrorResponse)
+    end

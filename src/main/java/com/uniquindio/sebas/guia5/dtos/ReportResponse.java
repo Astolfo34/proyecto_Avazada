@@ -1,6 +1,8 @@
 package com.uniquindio.sebas.guia5.dtos;
 
 import com.uniquindio.sebas.guia5.doamin.Categoria;
+import com.uniquindio.sebas.guia5.doamin.Comentario;
+import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
 import com.uniquindio.sebas.guia5.doamin.Location;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -37,8 +39,12 @@ public record ReportResponse(
         @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
         List<Categoria> categories,
         @NotBlank(message = "la fecha del suceso es requerida")
-        @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
+        //@PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
         String fechaSuceso,
-        String userId
+        String userId,
+        List<Comentario>comments,
+        Integer importanceCount,
+        EstadoReporte status,
+        String creadorId
 ) {
 }
