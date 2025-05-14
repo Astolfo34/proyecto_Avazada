@@ -1,6 +1,7 @@
 package com.uniquindio.sebas.guia5.services;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
+import com.uniquindio.sebas.guia5.dtos.ReportRequest;
 import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 
@@ -12,19 +13,18 @@ import java.util.Optional;
  */
 public interface ReporteService {
 
-    ReportResponse crearReporte(ReporteDTO reporteDTO);
+    ReportResponse crearReporte(ReportRequest reporteDTO);
 
-    ReportResponse actualizarReporte(String userId,ReporteDTO reporteDTO);
+    ReportResponse actualizarReporte(String userId,ReportRequest reporteDTO);
 
     void eliminarReporte(String idReporte);
 
-    Optional<ReportResponse> obtenerReportePorId(String idReporte);
+    ReportResponse obtenerReportePorId(String idReporte);
 
-    List<ReporteDTO> listarTodosLosReportes();
+    List<ReportResponse> listarTodosLosReportes();
 
-    List<ReporteDTO> listarReportesPorUsuario(String userId);
+    List<ReportResponse> listarReportesPorUsuario(String userId);
 
-    List<ReporteDTO> listarReportesPorEstado(EstadoReporte estadoReporte);
 
 
 }

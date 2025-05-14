@@ -1,6 +1,7 @@
 package com.uniquindio.sebas.guia5.mappers;
 
 import com.uniquindio.sebas.guia5.doamin.Reporte;
+import com.uniquindio.sebas.guia5.dtos.ReportRequest;
 import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
 import org.bson.types.ObjectId;
@@ -22,21 +23,26 @@ public interface ReporteMapper {
 
     ReporteMapper INSTANCE = Mappers.getMapper(ReporteMapper.class);
 
-    @Mapping(target = "userId", ignore = true )// ignorado por ahora mientras pruebas
-    @Mapping(target = "id",expression = "java(java.util.UUID.randomUUID().toString())")
+    @Mapping(target = "userId", ignore = true )// ignorado por ahora mientras pruebas pero es source = "userId_creador"
+    @Mapping(target = "id",expression = "java(java.util.UUID.randomUUID().toString())") // del reporte
     @Mapping(target = "location", source = "location")
     @Mapping(target = "title",source = "title")
-    @Mapping(target = "content", source = "content")
-    @Mapping(target = "imageUrl", source = "imageUrl")
-    @Mapping(target = "occurrenceDate", source = "occurrenceDate")
+    @Mapping(target = "content", source = "contenido")
+    @Mapping(target = "imageUrl", source = "image")
+    @Mapping(target = "occurrenceDate", source = "fechaSuceso")
     @Mapping(target = "categories", source = "categories")
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "status", constant = "PENDIENTE")
+    @Mapping(target = "status", source = "status")
     @Mapping(target = "listComments", ignore = true)
-    @Mapping(target = "importanceCount", ignore = true)
-    Reporte parseOf(ReporteDTO reporteDTO);
+    @Mapping(target = "importanceCount",source = "importanceCount")
+    Reporte parseOf(ReportRequest reporteDTO); // mapear de reporteDTO a reporte entidad
 
-
+    @Mapping(source = "content",target = "contenido")
+    @Mapping(source = "imageUrl", target = "image")
+    @Mapping(source = "location", target = "location")
+    @Mapping(source = "categories", target = "categories")
+    @Mapping(source = "occurrenceDate", target = "fechaSuceso")
+    @Mapping(source = "userId", target = "userId")
     ReportResponse toReportResponse(Reporte reporte);
 
 

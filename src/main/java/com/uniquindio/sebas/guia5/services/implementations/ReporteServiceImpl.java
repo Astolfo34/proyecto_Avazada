@@ -2,7 +2,6 @@ package com.uniquindio.sebas.guia5.services.implementations;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
 import com.uniquindio.sebas.guia5.doamin.Reporte;
-import com.uniquindio.sebas.guia5.doamin.User;
 import com.uniquindio.sebas.guia5.dtos.*;
 import com.uniquindio.sebas.guia5.exceptions.ValueConflictExceptions;
 import com.uniquindio.sebas.guia5.mappers.ReporteMapper;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -31,7 +31,7 @@ public class ReporteServiceImpl implements ReporteService {
     private final Map<String, Reporte> reporteStore = new ConcurrentHashMap<>();
 
     @Override
-    public ReportResponse createReport(ReportRequest reporte) {
+    public ReportResponse crearReporte(ReportRequest reporte) {
         if (reporteStore.values().stream().anyMatch(r -> r.getTitle().equalsIgnoreCase(reporte.title())))
         {   throw new ValueConflictExceptions("el titulo ya esta registrado"); }
             var newReporte = reporteMapper.parseOf(reporte);
@@ -40,35 +40,32 @@ public class ReporteServiceImpl implements ReporteService {
     }
 
     @Override
-    public ReporteDTO actualizarReporte (String idReporte,ReportResponse reporteDTO){
-        Reporte reporteExistente = reporteRepository.findById(idReporte)
-                .orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
-
-        //Actualizar los campos permitidos
-        reporteExistente.setTitle(reporteDTO.title());
-        reporteExistente.setCategories(reporteDTO.getCategories());
-        reporteExistente.setLocation(reporteDTO.getLocation());
-        reporteExistente.setImageUrl(reporteDTO.getImageUrl());
-        reporteExistente.setContent(reporteDTO.getContent());
-        reporteExistente.setOccurrenceDate(reporteDTO.getOccurrenceDate());
-        reporteExistente.setStatus(reporteDTO.getStatus());
-        reporteExistente.setListComments(reporteDTO.getListComments());
-        reporteExistente.setImportanceCount(reporteDTO.getImportanceCount());
-
-        Reporte reporteActualizado = reporteRepository.save(reporteExistente);
-        return  reporteMapper.toReportResponse(reporteActualizado);
+    public ReportResponse actualizarReporte (String id, ReportRequest reportRequest){
+        //verificamos existencia
+        var reporteActual = findReporteById(id);
+        // actualizar datos
+        reporteActual.setImportanceCount(Integer.parseInt(reportRequest.title()));
+        reporteActual.setContent(reportRequest.contenido());
+        reporteActual.setLocation(reportRequest.location());
+        reporteActual.setStatus(reportRequest.status());
+        reporteActual.setCategories(reportRequest.categories());
+        reporteActual.setListComments(reportRequest.listaComentarios());
+        reporteActual.setImageUrl(reportRequest.image());
+        reporteActual.setOccurrenceDate(LocalDateTime.parse(reportRequest.fechaSuceso()));
+        return reporteMapper.toReportResponse(reporteRepository.save(reporteActual));
     }
 
     @Override
     public void eliminarReporte (String idReporte){
+        var reporteAlmacenado = findReporteById(idReporte); //basicamente no se estaria usando por ahora
+        reporteAlmacenado.setStatus(EstadoReporte.ELIMINADO);
+        //reporteRepository.save(reporteAlmacenado);
         reporteRepository.deleteById(idReporte);
     }
 
-    @Override
+
     public ReportResponse obtenerReportePorId (String idReporte){
-        return reporteRepository.findById(idReporte)
-                .map(reporteMapper::toReportResponse)
-                .orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
+        return reporteMapper.toReportResponse(findReporteById(idReporte));
     }
 
     @Override
@@ -86,10 +83,14 @@ public class ReporteServiceImpl implements ReporteService {
 
     }
 
-    @Override
-    public List<ReportResponse> listarReportesPorEstado(EstadoReporte estadoReporte){
-        return reporteRepository.findByEstadoReporte(estadoReporte).stream()
+    /*@Override
+    public List<ReportResponse> listarReportesPorEstado(EstadoReporte status){
+        return reporteRepository.findByEstadoReporte(status).stream()
                 .map(reporteMapper::toReportResponse)
                 .collect(Collectors.toList());
+    }*/
+    private Reporte findReporteById (String idReporte){
+        return reporteRepository.findById(idReporte)
+                .orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
     }
 }

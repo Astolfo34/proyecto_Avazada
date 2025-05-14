@@ -1,8 +1,7 @@
 package com.uniquindio.sebas.guia5.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.uniquindio.sebas.guia5.doamin.Comentario;
-import com.uniquindio.sebas.guia5.doamin.Imagen;
+import com.uniquindio.sebas.guia5.doamin.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,9 +13,7 @@ import java.util.List;
  * @param title
  * @param contenido
  * @param image
- * @param latitud
- * @param longitud
- * @param categoriasdIds
+ * @param categories
  * @param fechaSuceso
  */
 public record ReportRequest(
@@ -29,24 +26,29 @@ public record ReportRequest(
                             @NotNull(message = "la imagen es requerida")
                             @URL(message = "la imagen debe ser una URL valida")
                             String image,
-                            @NotNull(message = "la latitud es requerida")
+                            /*@NotNull(message = "la latitud es requerida")
                             @DecimalMin(value = "-90",inclusive = true, message = "la latitud debe ser mayor a -90")
                             @DecimalMax(value = "90",inclusive = true, message = "la latitud debe ser menor a 90")
                             String latitud,
                             @NotNull(message = "la longitud es requerida")
                             @DecimalMin(value = "-180",inclusive = true, message = "la latitud debe ser mayor a -180")
                             @DecimalMax(value = "180",inclusive = true, message = "la latitud debe ser menor a 180")
-                            String longitud,
+                            String longitud,*/
+                            @NotNull(message = "la ubicacion es requerida")
+                            Location location,
                             @NotEmpty(message = "el arreglo de Ids de categorias es requerido")
                             @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
-                            List<Long> categoriasdIds,
+                            List<Categoria> categories,
                             @NotBlank(message = "la fecha del suceso es requerida")
                             @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
                             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
                             @DateTimeFormat(pattern = "yyyy-MM-dd")
                             String fechaSuceso,
                             @NotEmpty(message = "los comentarios son requeridos")
-                            List<Comentario> listaComentarios
+                            List<Comentario> listaComentarios,
+                            String userId_creador,
+                            Integer importanceCount,
+                            EstadoReporte status
 
 ) {
 }

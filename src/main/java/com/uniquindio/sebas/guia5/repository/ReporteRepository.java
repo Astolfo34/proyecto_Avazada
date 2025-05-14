@@ -17,7 +17,5 @@ public interface ReporteRepository extends MongoRepository<Reporte, String> {
 
     List<Reporte> findByUserId(ObjectId userId);
 
-    List<Reporte> findByEstadoReporte(EstadoReporte estadoReporte);
 
-    List<Reporte> findByTituloContainingIgnoreCase(String titulo);
 }

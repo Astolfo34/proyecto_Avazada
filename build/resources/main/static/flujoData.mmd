@@ -1,0 +1,10 @@
+graph LR
+    A[Cliente Solicitud HTTP] -->|1. Solicitud _POST_| B[Controlador _Recibe DTO de solicitud_]
+B -->|2. Llamar servicio| C[Servicio _Lógica de negocio_]
+C -->|3. Convertir DTO a Entidad| D[Mapper _DTO a Entidad_]
+D -->|4. Guardar en BD| E[Repositorio _Guardar en MongoDB_]
+E -->|5. Persistencia| F[Entidad en BD _Usuario_]
+E -->|6. Obtener entidad| G[Mapper _Entidad a DTO_]
+G -->|7. Convertir Entidad a DTO| C
+C -->|8. Retornar DTO| B
+B -->|9. Respuesta HTTP| H[Cliente _Respuesta HTTP_]

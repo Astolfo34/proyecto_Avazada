@@ -23,9 +23,60 @@ Content-Type: application/json
 
 {
   "title": "incendio en biblioteca",
-  "content": "se esta quemando la biblioteca escolar",
+  "contenido": "se esta quemando la biblioteca escolar",
   "occurrenceDate": "2025-05-15",
-  "imageUrl": "http://sources/img1.jpg",
-  "categories": ["SEGURIDAD"],
-  "createdAt": "2025-05-15"
+  "image": "http://sources/img1.jpg",
+  "location": {
+    "latitud": 4.7110,
+    "longitud": -74.0721
+  },
+  "categories": [
+    {
+      "id": "2332333",
+      "description": "fuego"
+    }
+  ],
+  "fechaSuceso": "2025-02-15",
+  "listaComentarios": [
+    {
+      "creadorId": {
+      },
+      "contenido_comentario": "yo llame los bomberos",
+      "fechaCreacion": "2025-02-15"
+    }
+  ],
+  "importanceCount": 0,
+  "userId_creador": "",
+  "status": "PENDIENTE"
+}
+
+
+### probar un reporte
+POST http://localhost:8080/v1/reports
+Content-Type: application/json
+
+{
+  "title": "Incendio en biblioteca",
+  "contenido": "Se está quemando la biblioteca escolar",
+  "fechaSuceso": "2025-02-15",
+  "image": "http://sources/img1.jpg",
+  "location": {
+    "latitud": 4.7110,
+    "longitud": -74.0721
+  },
+  "categories": [
+    {
+      "id": 1,
+      "nombre": "Incendio"
+    }
+  ],
+  "listaComentarios": [
+    {
+      "autor": "Juan Pérez",
+      "contenido": "Este incidente es muy preocupante."
+    }
+  ],
+  "importanceCount": 0,
+  "userId_creador": "usuario123",
+  "status": "PENDIENTE"
 }
