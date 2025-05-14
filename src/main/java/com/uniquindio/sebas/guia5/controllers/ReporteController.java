@@ -4,6 +4,7 @@ import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
 import com.uniquindio.sebas.guia5.dtos.ReportRequest;
 import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
+import com.uniquindio.sebas.guia5.exceptions.ValueConflictExceptions;
 import com.uniquindio.sebas.guia5.services.ReporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,18 @@ public class ReporteController {
     private final ReporteService reporteService;
 
     @PostMapping
-    public ResponseEntity<ReportResponse> crearReporte (@Valid @RequestBody ReportRequest reporteDTO){
-        return ResponseEntity.ok(reporteService.crearReporte(reporteDTO));
+    public ResponseEntity<ReportResponse> crearReporte (@RequestBody @Valid ReportRequest reporteDTO){
+
+            try {
+                return ResponseEntity.ok(reporteService.crearReporte(reporteDTO));
+            } catch (ValueConflictExceptions e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Error 409
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Error 400
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Error 500
+            }
+
     }
 
     @PutMapping("/{reportId}")

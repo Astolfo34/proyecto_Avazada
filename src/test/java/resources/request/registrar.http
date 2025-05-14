@@ -1,4 +1,4 @@
-###
+### 1d39606b-c086-462a-a933-4e0688682900
 POST http://localhost:8080/v1/users
 Content-Type: application/json
 
@@ -24,59 +24,24 @@ Content-Type: application/json
 {
   "title": "incendio en biblioteca",
   "contenido": "se esta quemando la biblioteca escolar",
-  "occurrenceDate": "2025-05-15",
-  "image": "http://sources/img1.jpg",
+  "image": "https://sources.com/img1.jpg",
   "location": {
+    "id": "1d39606b-c086-462a-a933-4e0688682900",
     "latitud": 4.7110,
     "longitud": -74.0721
   },
   "categories": [
     {
-      "id": "2332333",
-      "description": "fuego"
+      "id": "1d39606b-c086-462a-a933-4e0688682900",
+      "description": "fuego",
+      "name": "imprevisto"
     }
   ],
   "fechaSuceso": "2025-02-15",
-  "listaComentarios": [
-    {
-      "creadorId": {
-      },
-      "contenido_comentario": "yo llame los bomberos",
-      "fechaCreacion": "2025-02-15"
-    }
-  ],
-  "importanceCount": 0,
-  "userId_creador": "",
+  "listaComentarios": [],
+  "importanceCount": 1,
+  "userId_creador": "1d39606b-c086-462a-a933-4e0688682900",
   "status": "PENDIENTE"
 }
 
 
-### probar un reporte
-POST http://localhost:8080/v1/reports
-Content-Type: application/json
-
-{
-  "title": "Incendio en biblioteca",
-  "contenido": "Se está quemando la biblioteca escolar",
-  "fechaSuceso": "2025-02-15",
-  "image": "http://sources/img1.jpg",
-  "location": {
-    "latitud": 4.7110,
-    "longitud": -74.0721
-  },
-  "categories": [
-    {
-      "id": 1,
-      "nombre": "Incendio"
-    }
-  ],
-  "listaComentarios": [
-    {
-      "autor": "Juan Pérez",
-      "contenido": "Este incidente es muy preocupante."
-    }
-  ],
-  "importanceCount": 0,
-  "userId_creador": "usuario123",
-  "status": "PENDIENTE"
-}

@@ -1284,8 +1284,6 @@ components:
       description: Datos para crear un nuevo reporte.
       required:
       - title
-      - categoryIds
-      - location
       - occurrenceDate
       - content
       - imageUrl

@@ -32,11 +32,12 @@ public class ReporteServiceImpl implements ReporteService {
 
     @Override
     public ReportResponse crearReporte(ReportRequest reporte) {
-        if (reporteStore.values().stream().anyMatch(r -> r.getTitle().equalsIgnoreCase(reporte.title())))
+        if (reporteStore.values().stream().anyMatch(r -> r.getId().equalsIgnoreCase(reporte.userId_creador())))
         {   throw new ValueConflictExceptions("el titulo ya esta registrado"); }
             var newReporte = reporteMapper.parseOf(reporte);
-            reporteStore.put(newReporte.getId(), newReporte);
-            return reporteMapper.toReportResponse(newReporte);
+            var reporteGuardado = reporteRepository.save(newReporte);
+            //reporteStore.put(newReporte.getId(), newReporte);
+            return reporteMapper.toReportResponse(reporteGuardado);
     }
 
     @Override
