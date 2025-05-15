@@ -5,7 +5,9 @@ import com.uniquindio.sebas.guia5.dtos.UserRegistration;
 import com.uniquindio.sebas.guia5.dtos.UserResponse;
 import com.uniquindio.sebas.guia5.exceptions.ValueConflictExceptions;
 import com.uniquindio.sebas.guia5.mappers.UserMapper;
+import com.uniquindio.sebas.guia5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor   // thanks to this sentences lombok , it will generate a constructor with final attributes
+
 public class UserServicesImpl implements UserServices{
     /**
      * EN ESTA CLASE SE DEBE IMPLEMENTAR LA INSTERFAZ DEFINIDA PARA LOS SERVICIOS DE USUARIO EN

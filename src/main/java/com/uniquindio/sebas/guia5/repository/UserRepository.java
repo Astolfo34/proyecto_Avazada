@@ -11,5 +11,6 @@ import java.util.Optional;
  */
 public interface UserRepository extends MongoRepository<User, String> { // Cambio Long por String si usas MongoDB
     Optional<User> findUserByEmail(String email); // Método para buscar por email
+    //Optional<User> findUserByActivationCode(String username);
 }
 

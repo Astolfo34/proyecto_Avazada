@@ -24,25 +24,7 @@ public class UserController {
     public ResponseEntity<UserResponse>createUser(@Valid @RequestBody UserRegistration request){
         return ResponseEntity.ok(userServices.createUser(request));
     }
-    /*@PostMapping
-    public ResponseEntity<UserResponse>createUser(@Valid @RequestBody UserRegistration request){
-        var response = userServices.createUser(request);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(response.id())
-                .toUri();
-        return ResponseEntity.created(location).body(response);
-    }*/
 
-    /*//Read
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String id) {
-        Optional<UserResponse> user = userServices.getUser(id);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-*/
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> get(@PathVariable("id") String id){
         return userServices.getUser(id)

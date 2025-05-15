@@ -56,8 +56,23 @@ dependencies {
 
     // Spring Security
     implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'org.springdoc:springdoc-openapi-starter-common:2.3.0'
 
     //jackson para fechas
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // JJWT (JSON Web Token) - Versión compatible con Spring Boot 3.x
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // BCrypt para el password encoder (aunque spring-security-crypto ya lo incluye)
+    implementation 'org.mindrot:jbcrypt:0.4'
+
+    // Si quieres usar Java Mail para el envío de correos de verificación
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Para trabajar con fechas en JWT (opcional)
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
