@@ -8,8 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Document("reportes")  // Cambia la colección a 'reportes' en Mongo
@@ -35,12 +34,12 @@ public class Reporte {
     private String imageUrl;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private String content;
     private String userId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime occurrenceDate;
+    private LocalDate occurrenceDate;
 
     private EstadoReporte status;
     @Field("lista Comentarios")

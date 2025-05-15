@@ -52,7 +52,7 @@ public class ReporteServiceImpl implements ReporteService {
         reporteActual.setCategories(reportRequest.categories());
         reporteActual.setListComments(reportRequest.listaComentarios());
         reporteActual.setImageUrl(reportRequest.image());
-        reporteActual.setOccurrenceDate(LocalDateTime.parse(reportRequest.fechaSuceso()));
+        reporteActual.setOccurrenceDate(reportRequest.fechaSuceso());
         return reporteMapper.toReportResponse(reporteRepository.save(reporteActual));
     }
 

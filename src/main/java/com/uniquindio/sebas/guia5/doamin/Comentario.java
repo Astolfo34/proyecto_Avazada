@@ -7,9 +7,9 @@ import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Document("comentarios")
 @Getter
@@ -26,7 +26,6 @@ public class Comentario {
 
     private String contenido_comentario;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime fechaCreacion;
+    private LocalDate fechaCreacion;
 }
 

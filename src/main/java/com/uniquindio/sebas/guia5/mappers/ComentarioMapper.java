@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        imports = {java.util.UUID.class})
+        imports = {java.util.UUID.class , java.time.LocalDate.class})
 public interface ComentarioMapper {
 
     @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")
-    @Mapping(target = "fechaCreacion", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "fechaCreacion", expression = "java(LocalDate.now())")
 
     //De DTO a entidad
     Comentario toEntity(ComentarioDTO dto);

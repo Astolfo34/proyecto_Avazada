@@ -29,9 +29,9 @@ public interface ReporteMapper {
     @Mapping(target = "title",source = "title")
     @Mapping(target = "content", source = "contenido")
     @Mapping(target = "imageUrl", source = "image")
-    @Mapping(target = "occurrenceDate", source = "fechaSuceso", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "occurrenceDate", source = "fechaSuceso")
     @Mapping(target = "categories", source = "categories" )
-    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
     @Mapping(target = "status", source = "status")
     @Mapping(target = "listComments", ignore = true)
     @Mapping(target = "importanceCount",source = "importanceCount")
@@ -43,7 +43,7 @@ public interface ReporteMapper {
     @Mapping(target = "image", source = "imageUrl") // Mapear la URL de la imagen
     @Mapping(target = "location", source = "location") // Mapear la ubicación
     @Mapping(target = "categories", source = "categories") // Mapear las categorías
-    @Mapping(target = "fechaSuceso", source = "occurrenceDate", dateFormat = "yyyy-MM-dd") // Convertir la fecha
+    @Mapping(target = "fechaSuceso", source = "occurrenceDate") // Convertir la fecha
     @Mapping(target = "userId", source = "userId") // Mapear el ID del usuario
     @Mapping(target = "comments", source = "listComments") // Mapear los comentarios
     @Mapping(target = "importanceCount", source = "importanceCount") // Mapear la importancia
