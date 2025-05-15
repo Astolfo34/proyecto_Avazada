@@ -21,11 +21,11 @@ public class Comentario {
     @Id
     private String id;
 
-    private ObjectId creadorId;
-    private ObjectId reporteId;
+    private String creadorId;
+    private String reporteId;
 
     private String contenido_comentario;
 
-    private LocalDate fechaCreacion;
+    private LocalDate fechaPublication;
 }
 

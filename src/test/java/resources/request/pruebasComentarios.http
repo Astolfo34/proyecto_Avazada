@@ -1,23 +1,5 @@
-### crear un usuario
-POST http://localhost:8080/v1/users
-Content-Type: application/json
 
-{
-  "email": "usuario@mail.com",
-  "password": "12345aBc",
-  "fullname": "Usuario de Prueba",
-  "dateBirth": "1990-05-12",
-  "direccion": "av 30 de nov #10-72",
-  "imagenPerfil": "http://sources/img1.jpg",
-  "rol": "USERDEFAULT",
-  "telefono": "+123456789012",
-  "ubicacionUsuario": {
-    "latitud": 4.79900,
-    "longitud": -49.5600
-  }
-}
-
-### probar un reporte
+### Crear reporte (primero)
 POST http://localhost:8080/v1/reports
 Accept: application/json
 Content-Type: application/json
@@ -45,4 +27,12 @@ Content-Type: application/json
   "status": "PENDIENTE"
 }
 
+> {% client.global.set("reportId", response.body.id) %}
 
+### Crear comentario (después)
+POST http://localhost:8080/v1/reports/{{reportId}}/comments
+Content-Type: application/json
+
+{
+  "contenido_comentario": "Este comentario es de prueba"
+}
