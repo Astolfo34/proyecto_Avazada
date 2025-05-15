@@ -1239,7 +1239,7 @@ components:
           description: "Correo electr\xF3nico de la cuenta a activar."
           example: usuario@ejemplo.com
         activationCode:
-          type: string
+          type: integer
           description: "C\xF3digo de activaci\xF3n recibido por correo."
           example: 6742
     RecoverPasswordRequest:

@@ -40,7 +40,7 @@ public record ReportResponse(
         @NotEmpty(message = "el arreglo de Ids de categorias es requerido")
         @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
         List<Categoria> categories,
-        @NotBlank(message = "la fecha del suceso es requerida")
+        @NotNull(message = "la fecha del suceso es requerida")
         @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
         LocalDate fechaSuceso,
         String userId,
