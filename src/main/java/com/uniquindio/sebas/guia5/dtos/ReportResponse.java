@@ -9,6 +9,8 @@ import lombok.*;
 import org.hibernate.validator.constraints.URL;
 import org.mapstruct.Builder;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,8 +41,8 @@ public record ReportResponse(
         @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
         List<Categoria> categories,
         @NotBlank(message = "la fecha del suceso es requerida")
-        //@PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
-        String fechaSuceso,
+        @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
+        LocalDate fechaSuceso,
         String userId,
         List<Comentario>comments,
         Integer importanceCount,

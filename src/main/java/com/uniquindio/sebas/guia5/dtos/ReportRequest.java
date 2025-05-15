@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,11 +33,11 @@ public record ReportRequest(
                             @NotEmpty(message = "el arreglo de Ids de categorias es requerido")
                             @Size(min = 1, message = "el arreglo de categorias es requrido con al menos 1 elemento")
                             List<Categoria> categories,
-                            @NotBlank(message = "la fecha del suceso es requerida")
+                            @NotNull(message = "la fecha del suceso es requerida")
                             @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
                             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
                             @DateTimeFormat(pattern = "yyyy-MM-dd")
-                            String fechaSuceso,
+                            LocalDate fechaSuceso,
                             List<Comentario> listaComentarios,
                             String userId_creador,
                             Integer importanceCount,

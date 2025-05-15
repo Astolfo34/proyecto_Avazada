@@ -56,6 +56,9 @@ dependencies {
 
     // Spring Security
     implementation 'org.springframework.security:spring-security-crypto'
+
+    //jackson para fechas
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 tasks.named('test') {

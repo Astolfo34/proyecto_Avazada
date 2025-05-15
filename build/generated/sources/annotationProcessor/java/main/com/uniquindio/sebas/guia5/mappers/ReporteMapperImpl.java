@@ -7,8 +7,7 @@ import com.uniquindio.sebas.guia5.doamin.Location;
 import com.uniquindio.sebas.guia5.doamin.Reporte;
 import com.uniquindio.sebas.guia5.dtos.ReportRequest;
 import com.uniquindio.sebas.guia5.dtos.ReportResponse;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -16,13 +15,11 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-14T17:48:33-0500",
+    date = "2025-05-14T19:17:40-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
 public class ReporteMapperImpl implements ReporteMapper {
-
-    private final DateTimeFormatter dateTimeFormatter_yyyy_MM_dd_0159776256 = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
 
     @Override
     public Reporte parseOf(ReportRequest reporteDTO) {
@@ -37,9 +34,7 @@ public class ReporteMapperImpl implements ReporteMapper {
         reporte.title( reporteDTO.title() );
         reporte.content( reporteDTO.contenido() );
         reporte.imageUrl( reporteDTO.image() );
-        if ( reporteDTO.fechaSuceso() != null ) {
-            reporte.occurrenceDate( LocalDateTime.parse( reporteDTO.fechaSuceso(), dateTimeFormatter_yyyy_MM_dd_0159776256 ) );
-        }
+        reporte.occurrenceDate( reporteDTO.fechaSuceso() );
         List<Categoria> list = reporteDTO.categories();
         if ( list != null ) {
             reporte.categories( new ArrayList<Categoria>( list ) );
@@ -50,7 +45,7 @@ public class ReporteMapperImpl implements ReporteMapper {
         }
 
         reporte.id( java.util.UUID.randomUUID().toString() );
-        reporte.createdAt( java.time.LocalDateTime.now() );
+        reporte.createdAt( java.time.LocalDate.now() );
 
         return reporte.build();
     }
@@ -67,7 +62,7 @@ public class ReporteMapperImpl implements ReporteMapper {
         String image = null;
         Location location = null;
         List<Categoria> categories = null;
-        String fechaSuceso = null;
+        LocalDate fechaSuceso = null;
         String userId = null;
         List<Comentario> comments = null;
         Integer importanceCount = null;
@@ -83,9 +78,7 @@ public class ReporteMapperImpl implements ReporteMapper {
         if ( list != null ) {
             categories = new ArrayList<Categoria>( list );
         }
-        if ( reporte.getOccurrenceDate() != null ) {
-            fechaSuceso = dateTimeFormatter_yyyy_MM_dd_0159776256.format( reporte.getOccurrenceDate() );
-        }
+        fechaSuceso = reporte.getOccurrenceDate();
         userId = reporte.getUserId();
         List<Comentario> list1 = reporte.getListComments();
         if ( list1 != null ) {

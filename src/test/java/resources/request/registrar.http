@@ -19,6 +19,7 @@ Content-Type: application/json
 
 ### probar un reporte
 POST http://localhost:8080/v1/reports
+Accept: application/json
 Content-Type: application/json
 
 {
@@ -37,7 +38,7 @@ Content-Type: application/json
       "name": "imprevisto"
     }
   ],
-  "fechaSuceso": "2025-02-15",
+  "fechaSuceso": "2025-05-11",
   "listaComentarios": [],
   "importanceCount": 1,
   "userId_creador": "1d39606b-c086-462a-a933-4e0688682900",
