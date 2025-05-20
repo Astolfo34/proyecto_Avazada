@@ -1,0 +1,39 @@
+POST http://localhost:8080/v1/users
+Content-Type: application/json
+
+{
+  "email": "jsebasdroid31@gmail.com",
+  "password": "12345aBc",
+  "fullname": "Usuario de Prueba",
+  "dateBirth": "1990-05-12",
+  "direccion": "av 30 de nov #10-72",
+  "imagenPerfil": "http://sources/img1.jpg",
+  "rol": "USERDEFAULT",
+  "telefono": "+123456789012",
+  "ubicacionUsuario": {
+    "latitud": 4.79900,
+    "longitud": -49.5600
+  }
+}
+
+
+###
+GET http://localhost:8080/v1/auth/activate?codigo=CODIGO_RECIBIDO
+###
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+"email": "usuario@ejemplo.com",
+"password": "Password123!"
+}
+
+###
+POST http://localhost:8080/v1/reports
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "titulo": "Mi primer reporte",
+  "descripcion": "Este es un reporte creado después de activar mi cuenta"
+}

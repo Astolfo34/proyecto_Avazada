@@ -71,9 +71,19 @@ dependencies {
 
     // Si quieres usar Java Mail para el envío de correos de verificación
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // para uso dE sENgRID PARA ENVIO DE CORREOS
+    implementation 'com.sendgrid:sendgrid-java:4.10.1'
+    implementation 'com.sendgrid:sendgrid-java:4.10.1'
 
     // Para trabajar con fechas en JWT (opcional)
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    // Dependencias para JWT (agrégalas junto a las que ya tienes)
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+}
+repositories {
+    mavenCentral()
 }
 
 tasks.named('test') {

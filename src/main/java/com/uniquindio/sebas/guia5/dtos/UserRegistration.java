@@ -3,6 +3,7 @@ package com.uniquindio.sebas.guia5.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.uniquindio.sebas.guia5.doamin.Location;
 import com.uniquindio.sebas.guia5.doamin.Rol;
+import com.uniquindio.sebas.guia5.doamin.UserStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -47,7 +48,8 @@ public record UserRegistration (@NotBlank(message = "Este campo es requerido")
                                 String imagenPerfil,
                                 @NotNull(message = "la ubicacion no puede estar vacía")
                                 @Valid
-                                Location ubicacionUsuario
+                                Location ubicacionUsuario,
+                                UserStatus status
 ) {
     public UserRegistration {
         rol = Objects.requireNonNullElse(rol, Rol.USERDEFAULT);

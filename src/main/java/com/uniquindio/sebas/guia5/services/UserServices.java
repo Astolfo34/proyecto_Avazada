@@ -5,6 +5,9 @@ import com.uniquindio.sebas.guia5.dtos.UserRegistration;
 import com.uniquindio.sebas.guia5.dtos.UserResponse;
 import com.uniquindio.sebas.guia5.repository.UserRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,5 +29,12 @@ public interface UserServices {
     Optional<UserResponse> updateUser(String id, UserRegistration request);
     boolean deleteUser(String id);
 
-   // void registerNewUserAccount(@Valid RegisterRequest request);
+    boolean activateUser(@NotBlank(message = "El código de activación es requerido") String s);
+
+    boolean estaActivo(String email);
+
+    UserDetails loadUserByUsername(String email);
+
+
+    // void registerNewUserAccount(@Valid RegisterRequest request);
 }

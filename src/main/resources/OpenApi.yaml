@@ -470,6 +470,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: Iniciar sesi\xF3n de usuario
+      description: "Permite a un usuario autenticado iniciar sesi\xF3n en el sistema."
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: "Inicio de sesi\xF3n exitoso."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: "Solicitud inv\xE1lida (ej. formato de correo o contrase\xF1a\
+            \ incorrecto)."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado (credenciales incorrectas).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1/notifications:
     get:
       tags:
