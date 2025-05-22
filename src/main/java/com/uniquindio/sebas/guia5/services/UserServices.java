@@ -29,7 +29,7 @@ public interface UserServices {
     Optional<UserResponse> updateUser(String id, UserRegistration request);
     boolean deleteUser(String id);
 
-    boolean activateUser(@NotBlank(message = "El código de activación es requerido") String s);
+    boolean activateUser(@NotBlank(message = "El código de activación es requerido y el email") String e, String s);
 
     boolean estaActivo(String email);
 

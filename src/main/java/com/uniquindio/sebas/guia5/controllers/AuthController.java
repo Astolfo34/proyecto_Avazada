@@ -2,6 +2,7 @@ package com.uniquindio.sebas.guia5.controllers;
 
 import com.uniquindio.sebas.guia5.dtos.ActivateAccountRequest;
 import com.uniquindio.sebas.guia5.dtos.LoginDTO;
+import com.uniquindio.sebas.guia5.dtos.SuccesResponse;
 import com.uniquindio.sebas.guia5.services.JwtService;
 import com.uniquindio.sebas.guia5.services.UserServices;
 import com.uniquindio.sebas.guia5.services.UserServicesImpl;
@@ -28,10 +29,10 @@ public class AuthController {
     private final JwtService jwtService; //crear el token
 
     @PostMapping("/activate")
-    public ResponseEntity<?>activationAccount (@Valid @RequestBody ActivateAccountRequest request){
-        if(userServices.activateUser(request.activationCode())){
+    public ResponseEntity<?>activationAccount (@Valid @RequestBody ActivateAccountRequest request){ //usando el metodo que implementa userDetails dto
+        if(userServices.activateUser(request.email(),request.activationCode())){
             return ResponseEntity.ok("Cuenta Activada Exitosamente");
-        }else{
+        }else{ // por ahora se usaran opcionales "?" pero hay que modificarlo a SuccesResponse
             return ResponseEntity.badRequest().body("Error al activar cuenta, código invalido o cuenta ya activa");
         }
     }

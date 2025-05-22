@@ -1273,9 +1273,9 @@ components:
           description: "Correo electr\xF3nico de la cuenta a activar."
           example: usuario@ejemplo.com
         activationCode:
-          type: integer
+          type: string
           description: "C\xF3digo de activaci\xF3n recibido por correo."
-          example: 6742
+          example: 6a27f8b5-cc0e-4a3e-8b17-1c8b1c4b0e41
     RecoverPasswordRequest:
       type: object
       description: "Datos para solicitar la recuperaci\xF3n de contrase\xF1a."

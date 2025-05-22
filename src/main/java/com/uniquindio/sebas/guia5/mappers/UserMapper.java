@@ -13,7 +13,7 @@ public interface UserMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "stateUser", source = "status")
     @Mapping(target = "password", expression = "java(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode(userDTO.password()))")
-    @Mapping(target = "rolUser", source = "rol")  // Mapeo de rol en UserRegistration a rolUser en User entidad
+    @Mapping(target = "rolUser", ignore = true)  // ignorado ya que solo los admins pueden cambiar su rol, en el servicio setea el userdefault
     @Mapping(target = "fullName", source = "fullname")
     @Mapping(target = "telefono", source = "telefono")
     @Mapping(target = "lista_Reportes", ignore = true)

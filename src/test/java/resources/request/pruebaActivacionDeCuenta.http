@@ -16,10 +16,17 @@ Content-Type: application/json
   }
 }
 
+### Una vez recibido el codigo al correo, activar la cuenta
+POST http://localhost:8080/v1/auth/activate
+Content-Type: application/json
 
-###
-GET http://localhost:8080/v1/auth/activate?codigo=CODIGO_RECIBIDO
-###
+{
+  "email": "jsebasdroid31@gmail.com",
+  "activationCode": "c2070c1c-98fb-4af3-9f53-197337d4e641"
+}
+
+
+### Una vez recibido el codigo al correo y haber activado la cuenta, LOguearse
 POST http://localhost:8080/v1/auth/login
 Content-Type: application/json
 

@@ -1,5 +1,7 @@
 package com.uniquindio.sebas.guia5.controllers;
 
+import com.uniquindio.sebas.guia5.dtos.ActivateAccountRequest;
+import com.uniquindio.sebas.guia5.dtos.SuccesResponse;
 import com.uniquindio.sebas.guia5.dtos.UserRegistration;
 import com.uniquindio.sebas.guia5.dtos.UserResponse;
 import com.uniquindio.sebas.guia5.services.UserServices;
@@ -51,5 +53,10 @@ public class UserController {
         }
     }
 
+    /*@PostMapping("v1/auth/activate") no estoy seguro si manejarlo desde el controlador de usuarios
+    public  ResponseEntity<SuccesResponse>ActivarCuentaUsuario(@RequestBody @Valid ActivateAccountRequest request){
+        userServices.activateUser(request.email(),request.activationCode());
+        return ResponseEntity.ok(new SuccesResponse("Cuenta activada con exito"));
+    }*/
 
 }

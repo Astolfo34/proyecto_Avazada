@@ -15,12 +15,14 @@ import com.uniquindio.sebas.guia5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import com.sendgrid.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -59,8 +61,9 @@ public class UserServicesImpl implements UserServices{
             newUser.setActivationCode(java.util.UUID.randomUUID().toString());
             newUser.setStateUser(UserStatus.PENDING_ACTIVATION); // Estado temporal mientras se activa la cuenta
 
-            userStore.put(newUser.getId(), newUser);
+            userStore.put(newUser.getId(), newUser); // solamente para la concurrencia basica
             sendActivationEmail(newUser);
+            userRepository.save(newUser); // guardar el usuario en la base de datos
             return userMapper.toUserResponse(newUser);
     }
 
@@ -101,21 +104,27 @@ public class UserServicesImpl implements UserServices{
         }
     }
 
-    public boolean activateUser(String activationCode) {
-        Optional<User> optionalUser = userRepository.findUserByActivationCode(activationCode);
-        return userStore.values().stream()
-                .filter(user -> activationCode.equals(user.getActivationCode()) && !user.isActivo())
-                .findFirst()
-                .map(user -> {
-                    user.setActivo(true);
-                    user.setActivationCode(null); // Limpiar el código
-                    user.setStateUser(UserStatus.REGISTERED); // EL USUARIO SE HA VERIFICADO
-                    // En este caso con ConcurrentHashMap, la modificación ya está hecha en la instancia.
-                    // ya que se obtiene una  referencia directa al objeto cuando el usuario igresa el codigo
-                    // en el controlador que lee el endpoind de activacion
-                    return true;
-                })
-                .orElse(false);
+    public boolean activateUser(String email,String activationCode) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        if (user.isActivo()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La cuenta ya está activada.");
+        }
+
+        if (!activationCode.equals(user.getActivationCode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código de activación inválido.");
+        }
+
+        user.setActivo(true);
+        user.setActivationCode(null);
+        user.setStateUser(UserStatus.REGISTERED);
+
+        userRepository.save(user);
+        if(user.getStateUser().equals(UserStatus.PENDING_ACTIVATION)){
+            return false;
+        }
+        return true;
     }
 
     @Override
