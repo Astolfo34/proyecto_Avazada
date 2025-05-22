@@ -1,0 +1,38 @@
+
+### Crear reporte (primero)
+POST http://localhost:8080/v1/reports
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "incendio en biblioteca",
+  "contenido": "se esta quemando la biblioteca escolar",
+  "image": "https://sources.com/img1.jpg",
+  "location": {
+    "id": "1d39606b-c086-462a-a933-4e0688682900",
+    "latitud": 4.7110,
+    "longitud": -74.0721
+  },
+  "categories": [
+    {
+      "id": "1d39606b-c086-462a-a933-4e0688682900",
+      "description": "fuego",
+      "name": "imprevisto"
+    }
+  ],
+  "fechaSuceso": "2025-05-11",
+  "listaComentarios": [],
+  "importanceCount": 1,
+  "userId_creador": "1d39606b-c086-462a-a933-4e0688682900",
+  "status": "PENDIENTE"
+}
+
+> {% client.global.set("reportId", response.body.id) %}
+
+### Crear comentario (después)
+POST http://localhost:8080/v1/reports/{{reportId}}/comments
+Content-Type: application/json
+
+{
+  "contenido_comentario": "Este comentario es de prueba"
+}

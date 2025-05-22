@@ -1,37 +1,57 @@
 package com.uniquindio.sebas.guia5.exceptions;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.uniquindio.sebas.guia5.dtos.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-
-@RestControllerAdvice
-@ControllerAdvice
+import java.util.stream.Collectors;
 
 /**
-             * CLASE GLOBAL PARA EL MANEJO DE EXCEPCIONES, DE MODO QUE LA RESPUESTA SEA AMIGABLE
-             * Y LOS ERRORES SEAN CONSISTENTES
+ * Maneja excepciones globales de la aplicación para respuestas HTTP consistentes y amigables.
+ * - Centraliza el manejo de errores.
+ * - Procesa validaciones (@Valid) y conflictos de negocio.
  */
+@RestControllerAdvice // Combina @ControllerAdvice + @ResponseBody (suficiente, no necesita ambas anotaciones)
 public class GlobalExceptionsHandler {
 
-        @ExceptionHandler(ValueConflictExceptions.class) //calse que obtendra los valores de la exepcion
-        public ResponseEntity<ErrorResponse> handleValueConflictExceptions(ValueConflictExceptions e) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("ERROR",e.getMessage()));
+        // ===== Excepciones Específicas =====
+        @ExceptionHandler(ValueConflictExceptions.class)
+        public ResponseEntity<ErrorResponse> handleValueConflict(ValueConflictExceptions ex) {
+                return ResponseEntity
+                        .status(HttpStatus.CONFLICT)
+                        .body(new ErrorResponse("CONFLICT_ERROR", ex.getMessage())); // Usa códigos descriptivos
         }
 
+        // ===== Validaciones (@Valid) =====
         @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<List<ErrorResponse>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) { //aquie es importante manejar el argumento con una variable distinta de 'e'
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                        ex.getFieldErrors().stream().map(
-                                e-> new ErrorResponse("ERROR",e.getField()+"->"+e.getDefaultMessage())
-                        ).toList()
+        public ResponseEntity<List<ErrorResponse>> handleValidationErrors(MethodArgumentNotValidException ex) {
+                List<ErrorResponse> errors = ex.getFieldErrors()
+                        .stream()
+                        .map(this::mapToErrorResponse)
+                        .collect(Collectors.toList()); // Más legible que .toList()
+
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST) // 400 es más apropiado para validaciones fallidas
+                        .body(errors);
+        }
+
+        // ===== Excepciones Genéricas (Fallback) =====
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ErrorResponse> handleUnknownException(Exception ex) {
+                return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("INTERNAL_ERROR", "Ocurrió un error inesperado"));
+        }
+
+        // ===== Métodos Auxiliares =====
+        private ErrorResponse mapToErrorResponse(FieldError fieldError) {
+                return new ErrorResponse(
+                        "VALIDATION_ERROR",
+                        String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage())
                 );
         }
 }

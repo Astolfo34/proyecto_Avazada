@@ -9,7 +9,8 @@ import org.mapstruct.MappingConstants;
 
 import java.util.UUID;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        imports = {java.util.UUID.class})
 public interface ImagenMapper {
 
     @Mapping(target = "id", expression = "java(UUID.randomUUID().toString())")

@@ -2,7 +2,6 @@ package com.uniquindio.sebas.guia5.mappers;
 
 import com.uniquindio.sebas.guia5.doamin.Rol;
 import com.uniquindio.sebas.guia5.doamin.User;
-import com.uniquindio.sebas.guia5.doamin.UserStatus;
 import com.uniquindio.sebas.guia5.dtos.UserRegistration;
 import com.uniquindio.sebas.guia5.dtos.UserResponse;
 import java.time.LocalDate;
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-02T07:44:12-0500",
-    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.7 (Amazon.com Inc.)"
+    date = "2025-05-21T22:27:58-0500",
+    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -25,16 +24,15 @@ public class UserMapperImpl implements UserMapper {
 
         User.UserBuilder user = User.builder();
 
-        user.rolUser( userDTO.rol() );
+        user.stateUser( userDTO.status() );
         user.fullName( userDTO.fullname() );
+        user.telefono( userDTO.telefono() );
         user.email( userDTO.email() );
         user.dateBirth( userDTO.dateBirth() );
         user.direccion( userDTO.direccion() );
-        user.telefono( userDTO.telefono() );
         user.imagenPerfil( userDTO.imagenPerfil() );
 
         user.id( java.util.UUID.randomUUID().toString() );
-        user.stateUser( UserStatus.REGISTERED );
         user.password( new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode(userDTO.password()) );
 
         return user.build();

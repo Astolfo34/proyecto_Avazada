@@ -49,5 +49,7 @@ public class User {
     private String telefono;
     private String imagenPerfil;
     // se asume que se manejara la direccion de la ciudad por logica de ubicacion
+    private boolean activo; //enabled
+    private String activationCode;
 }
 

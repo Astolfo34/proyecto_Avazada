@@ -1,25 +1,48 @@
-GET http://localhost:8080/users/7e51313a-d5dd-432f-b01f-54efb9a48f0e
-Accept: application/json
-
-###
-POST http://localhost:8080/users
+### crear un usuario
+POST http://localhost:8080/v1/users
 Content-Type: application/json
 
 {
   "email": "usuario@mail.com",
   "password": "12345aBc",
-  "fullName": "Usuario de Prueba",
-  "dateBirth": "1990-05-12"
+  "fullname": "Usuario de Prueba",
+  "dateBirth": "1990-05-12",
+  "direccion": "av 30 de nov #10-72",
+  "imagenPerfil": "http://sources/img1.jpg",
+  "rol": "USERDEFAULT",
+  "telefono": "+123456789012",
+  "ubicacionUsuario": {
+    "latitud": 4.79900,
+    "longitud": -49.5600
+  }
 }
 
-### Envío con fallas en la solicitud
-POST http://localhost:8080/users
+### probar un reporte
+POST http://localhost:8080/v1/reports
+Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "usuariomail.com",
-  "fullName": "Usuario de Prueba",
-  "dateBirth": "1990-05-12"
+  "title": "incendio en biblioteca",
+  "contenido": "se esta quemando la biblioteca escolar",
+  "image": "https://sources.com/img1.jpg",
+  "location": {
+    "id": "1d39606b-c086-462a-a933-4e0688682900",
+    "latitud": 4.7110,
+    "longitud": -74.0721
+  },
+  "categories": [
+    {
+      "id": "1d39606b-c086-462a-a933-4e0688682900",
+      "description": "fuego",
+      "name": "imprevisto"
+    }
+  ],
+  "fechaSuceso": "2025-05-11",
+  "listaComentarios": [],
+  "importanceCount": 1,
+  "userId_creador": "1d39606b-c086-462a-a933-4e0688682900",
+  "status": "PENDIENTE"
 }
 
-###
+
