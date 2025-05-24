@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -19,6 +19,7 @@ public class UserDetailsImpl implements UserDetailsService {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        return new UserDetailsImpl(user); // clase que implementa UserDetails
+        // ✅ Aquí sí: pasas un User a una clase que espera un User
+        return new UserDetailsImpl(user);
     }
 }

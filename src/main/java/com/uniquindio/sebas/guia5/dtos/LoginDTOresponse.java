@@ -1,4 +1,9 @@
 package com.uniquindio.sebas.guia5.dtos;
 
-public class LoginDTOresponse {
+import jakarta.validation.constraints.NotNull;
+
+public record LoginDTOresponse(
+        String token,
+        String mensaje
+) {
 }

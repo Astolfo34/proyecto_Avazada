@@ -1,12 +1,9 @@
 package com.uniquindio.sebas.guia5.services;
 
-import com.uniquindio.sebas.guia5.dtos.RegisterRequest;
+import com.uniquindio.sebas.guia5.doamin.User;
 import com.uniquindio.sebas.guia5.dtos.UserRegistration;
 import com.uniquindio.sebas.guia5.dtos.UserResponse;
-import com.uniquindio.sebas.guia5.repository.UserRepository;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +31,7 @@ public interface UserServices {
     boolean estaActivo(String email);
 
     UserDetails loadUserByUsername(String email);
-
+    Optional<User>findUserByEmail(String email);
 
     // void registerNewUserAccount(@Valid RegisterRequest request);
 }

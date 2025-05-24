@@ -142,6 +142,7 @@ public class UserServicesImpl implements UserServices{
         return false;
     }
 
+    @Override
    public boolean estaActivo(String email) {
        return userRepository.findUserByEmail(email)
                .map(user -> user.isActivo())
@@ -159,4 +160,9 @@ public class UserServicesImpl implements UserServices{
                        .build())
                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
    }
+
+    @Override
+   public Optional<User>findUserByEmail(String email){
+     return userRepository.findUserByEmail(email);
+    }
 }

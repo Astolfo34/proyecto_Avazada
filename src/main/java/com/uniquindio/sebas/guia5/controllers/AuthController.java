@@ -1,23 +1,26 @@
 package com.uniquindio.sebas.guia5.controllers;
 
+import com.uniquindio.sebas.guia5.doamin.User;
 import com.uniquindio.sebas.guia5.dtos.ActivateAccountRequest;
 import com.uniquindio.sebas.guia5.dtos.LoginDTO;
-import com.uniquindio.sebas.guia5.dtos.SuccesResponse;
+import com.uniquindio.sebas.guia5.dtos.LoginDTOresponse;
 import com.uniquindio.sebas.guia5.services.JwtService;
 import com.uniquindio.sebas.guia5.services.UserServices;
-import com.uniquindio.sebas.guia5.services.UserServicesImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -38,24 +41,36 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
-        // Verificar si el usuario está activo
-        if (!userServices.estaActivo(loginDTO.email())) {
-            throw new RuntimeException("Cuenta no activada");
+    public ResponseEntity<LoginDTOresponse> login(@RequestBody @Valid LoginDTO request) {
+        Optional<User> userOptional = userServices.findUserByEmail(request.email());
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new LoginDTOresponse(null, "Usuario no encontrado.")
+            );
         }
 
-        // Autenticar
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.email(),
-                        loginDTO.password()
-                )
-        );
+        User user = userOptional.get();
 
-        // Generar token
-        UserDetails userDetails = userServices.loadUserByUsername(loginDTO.email());
-        String token = jwtService.generateToken(userDetails);
+        if (!userServices.estaActivo(request.email())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    new LoginDTOresponse(null, "La cuenta aún no ha sido activada.")
+            );
+        }
 
-        return ResponseEntity.ok(Map.of("token", token));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new LoginDTOresponse(null, "Credenciales incorrectas.")
+            );
+        }
+
+        String token = jwtService.generateToken(user);
+
+        return ResponseEntity.ok(new LoginDTOresponse(token, "Login exitoso"));
     }
+
 }
