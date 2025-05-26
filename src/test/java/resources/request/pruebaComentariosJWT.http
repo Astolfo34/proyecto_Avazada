@@ -1,0 +1,19 @@
+### Una vez recibido el codigo al correo y haber activado la cuenta, LOguearse, y sabiendo el id de un reporte existente
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "jsebasdroid31@gmail.com",
+  "password": "12345aBc"
+}
+
+
+
+### Asumiendo un reporte creado en la bd lo comentamos por su id
+POST http://localhost:8080/v1/reports/d2e77ecb-d719-474f-822f-d9cc5f4f1ed8/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODI5NzkzOCwiZXhwIjoxNzQ4Mzg0MzM4fQ.GR5CX5sZteZNGP2SUfgWPg59-lqHUYvvLNzWnQcWoWI
+
+{
+  "contenido_comentario": "ES correcto, pase a las 6:pm y lso bomberos aun no controlaban las llamas"
+}

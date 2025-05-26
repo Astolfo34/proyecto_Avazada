@@ -7,6 +7,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.bson.types.ObjectId;
 
+/**
+ * Representacion del objeto de la entidad que se tendra como respuesta
+ * @param id
+ * @param creadorId ojo debe ser el id pero por ahora el jwt esta dando el email autenticado que ha hecho el comentario
+ * @param reporteId
+ * @param contenido_comentario
+ * @param fechaPublication
+ */
+
 public record ComentarioResponse(
         @NotNull(message = "el comentario debe contener id")
         String id,
