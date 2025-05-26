@@ -1,0 +1,34 @@
+### Una vez recibido el codigo al correo y haber activado la cuenta, LOguearse
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "jsebasdroid31@gmail.com",
+  "password": "12345aBc"
+}
+
+###Asumiendo que el login fue correcto porque es un usuario realmente inscrito en la BD
+POST http://localhost:8080/v1/reports
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODI0NDg2MCwiZXhwIjoxNzQ4MzMxMjYwfQ.KeSxKYUtn3OBt-aOBr80yVV3cgFu8S-KUT_6Sb4HVk8
+
+
+{
+  "title": "incendio en biblioteca",
+  "contenido": "se esta quemando la biblioteca escolar",
+  "image": "https://sources.com/img1.jpg",
+  "location": {
+
+    "latitud": 4.7110,
+    "longitud": -74.0721
+  },
+  "categories": [
+    {
+
+      "description": "fuego",
+      "name": "imprevisto"
+    }
+  ],
+  "fechaSuceso": "2025-05-11"
+}
+

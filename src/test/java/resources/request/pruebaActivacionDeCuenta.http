@@ -1,3 +1,4 @@
+### Prueba de activacion de cuenta con FULL JWT
 POST http://localhost:8080/v1/users
 Content-Type: application/json
 
@@ -35,12 +36,3 @@ Content-Type: application/json
 "password": "12345aBc"
 }
 
-###
-POST http://localhost:8080/v1/reports
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-
-{
-  "titulo": "Mi primer reporte",
-  "descripcion": "Este es un reporte creado después de activar mi cuenta"
-}

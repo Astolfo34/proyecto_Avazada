@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T03:29:48-0500",
+    date = "2025-05-24T16:19:08-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
@@ -37,13 +37,11 @@ public class LocationMapperImpl implements LocationMapper {
 
         String latitud = null;
         String longitud = null;
-        String id = null;
 
         latitud = LocationMapper.doubleToString( entity.getLatitud() );
         longitud = LocationMapper.doubleToString( entity.getLongitud() );
-        id = entity.getId();
 
-        LocationDTO locationDTO = new LocationDTO( latitud, longitud, id );
+        LocationDTO locationDTO = new LocationDTO( latitud, longitud );
 
         return locationDTO;
     }

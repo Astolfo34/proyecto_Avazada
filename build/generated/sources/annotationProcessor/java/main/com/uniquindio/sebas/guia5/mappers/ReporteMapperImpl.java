@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T08:32:11-0500",
+    date = "2025-05-26T03:20:36-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
@@ -39,13 +39,12 @@ public class ReporteMapperImpl implements ReporteMapper {
         if ( list != null ) {
             reporte.categories( new ArrayList<Categoria>( list ) );
         }
-        reporte.status( reporteDTO.status() );
-        if ( reporteDTO.importanceCount() != null ) {
-            reporte.importanceCount( reporteDTO.importanceCount() );
-        }
 
         reporte.id( java.util.UUID.randomUUID().toString() );
         reporte.createdAt( java.time.LocalDate.now() );
+        reporte.status( reporteDTO.status() != null ? reporteDTO.status() : EstadoReporte.EN_ESPERA );
+        reporte.importanceCount( reporteDTO.importanceCount() != null ? reporteDTO.importanceCount() : 0 );
+        reporte.listComments( reporteDTO.listaComentarios() != null ? reporteDTO.listaComentarios() : new ArrayList<>() );
 
         return reporte.build();
     }

@@ -23,7 +23,7 @@ public interface ReporteMapper {
 
     ReporteMapper INSTANCE = Mappers.getMapper(ReporteMapper.class);
 
-    @Mapping(target = "userId", source = "userId_creador")// ignorado por ahora mientras pruebas pero es source = "userId_creador"
+    @Mapping(target = "userId", source = "userId_creador")
     @Mapping(target = "id",expression = "java(java.util.UUID.randomUUID().toString())") // del reporte
     @Mapping(target = "location", source = "location" )
     @Mapping(target = "title",source = "title")
@@ -32,9 +32,9 @@ public interface ReporteMapper {
     @Mapping(target = "occurrenceDate", source = "fechaSuceso")
     @Mapping(target = "categories", source = "categories" )
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
-    @Mapping(target = "status", source = "status")
-    @Mapping(target = "listComments", ignore = true)
-    @Mapping(target = "importanceCount",source = "importanceCount")
+    @Mapping(target = "status", expression = "java(reporteDTO.status() != null ? reporteDTO.status() : EstadoReporte.EN_ESPERA)")
+    @Mapping(target = "importanceCount", expression = "java(reporteDTO.importanceCount() != null ? reporteDTO.importanceCount() : 0)")
+    @Mapping(target = "listComments", expression = "java(reporteDTO.listaComentarios() != null ? reporteDTO.listaComentarios() : new ArrayList<>())")
     Reporte parseOf(ReportRequest reporteDTO); // mapear de reporteDTO a reporte entidad
 
     @Mapping(target = "id", source = "id") // Mapear el ID

@@ -67,20 +67,6 @@ public class UserServicesImpl implements UserServices{
             return userMapper.toUserResponse(newUser);
     }
 
-    //enviar codigo al correo del usuario
-    /*private void sendActivationEmail(User newUser) {
-        try {
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(newUser.getEmail());
-            mailMessage.setSubject("Activación de  cuenta de usuario");
-            mailMessage.setFrom(mailFrom);
-            mailMessage.setText("Usa este Código Para activar Tu Cuenta"+ newUser.getActivationCode());
-            logger.info("Enviando correo electrónico a {} desde {}", newUser.getEmail(), mailFrom);
-            mailSender.send(mailMessage);
-        } catch (Exception e) {
-            logger.error("Error al enviar correo electrónico", e);
-        }
-    }*/
     private void sendActivationEmail(User newUser) {
         Email from = new Email(mailFrom);
         Email to = new Email(newUser.getEmail());
@@ -155,7 +141,7 @@ public class UserServicesImpl implements UserServices{
                .map(user -> org.springframework.security.core.userdetails.User
                        .withUsername(user.getEmail())
                        .password(user.getPassword())
-                       .authorities("USERDEFAULT") // Ajusta los roles según tu lógica
+                       .authorities("USUARIO_ACTIVO") // Ajusta los roles según tu lógica
                        .accountLocked(!user.isActivo())
                        .build())
                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -165,4 +151,10 @@ public class UserServicesImpl implements UserServices{
    public Optional<User>findUserByEmail(String email){
      return userRepository.findUserByEmail(email);
     }
+
+    @Override
+    public Optional<User> findUserById(String id) {
+        return userRepository.findById(id);
+    }
+
 }

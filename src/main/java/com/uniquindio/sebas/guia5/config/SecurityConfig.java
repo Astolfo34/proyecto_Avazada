@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/v1/auth/login").permitAll()
 
                         // Endpoints que requieren autenticación
-                        .requestMatchers("/api/reportes/**").hasAuthority("USUARIO_ACTIVO")
+                        .requestMatchers("/v1/reports/**").hasAuthority("USUARIO_ACTIVO")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -48,6 +48,15 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Configuración del AuthenticationManager.
+     * Se utiliza para autenticar a los usuarios.
+     *
+     * Este metodo recibe la delegacion del trabajo por parte de Spring Security de AuthenticationManager
+     * en el controlador de autenticacion.
+     * @return AuthenticationManager configurado.
+     * @throws Exception Si ocurre un error durante la configuración.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

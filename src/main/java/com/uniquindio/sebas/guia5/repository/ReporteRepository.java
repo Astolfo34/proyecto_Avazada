@@ -15,7 +15,8 @@ import java.util.List;
 @Repository
 public interface ReporteRepository extends MongoRepository<Reporte, String> {
 
-    List<Reporte> findByUserId(ObjectId userId);
+    List<Reporte> findByUserId(String userId);
 
 
+    boolean existsByTitleAndUserId(String title, String userId);
 }

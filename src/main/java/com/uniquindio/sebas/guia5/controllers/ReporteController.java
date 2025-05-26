@@ -33,9 +33,9 @@ public class ReporteController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Error 409
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Error 400
-            } catch (Exception e) {
+            } /*catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Error 500
-            }
+            }*/
 
     }
 

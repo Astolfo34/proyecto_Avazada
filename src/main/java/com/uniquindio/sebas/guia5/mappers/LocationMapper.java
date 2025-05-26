@@ -13,12 +13,14 @@ public interface LocationMapper {
 
     LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
 
+    @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "latitud", source = "latitud", qualifiedByName = "stringToDouble")
     @Mapping(target = "longitud", source = "longitud", qualifiedByName = "stringToDouble")
     Location toEntity(LocationDTO dto);
 
     @Mapping(target = "latitud", source = "latitud", qualifiedByName = "doubleToString")
     @Mapping(target = "longitud", source = "longitud", qualifiedByName = "doubleToString")
+    @Mapping(target = "id", source = "id")
     LocationDTO toDto(Location entity);
 
     @Named("stringToDouble")

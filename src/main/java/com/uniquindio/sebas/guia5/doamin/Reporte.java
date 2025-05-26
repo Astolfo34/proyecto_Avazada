@@ -26,7 +26,7 @@ public class Reporte {
     private String title;
 
     @Field("lista categorias")
-    @DBRef
+    //@DBRef  para pruebas sin datos preexistentes, cuando se implemente hay que tomar medidas de validacion de datos ya existentes o lanzara error
     private List<Categoria> categories;
 
     private Location location;
@@ -43,7 +43,7 @@ public class Reporte {
 
     private EstadoReporte status;
     @Field("lista Comentarios")
-    @DBRef
+    //@DBRef
     private List<Comentario> listComments;
 
     private int importanceCount;

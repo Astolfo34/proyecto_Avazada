@@ -40,6 +40,15 @@ public class AuthController {
         }
     }
 
+    /**
+     * Endpoint para iniciar sesión.
+     *
+     * @param request Objeto que contiene el email y la contraseña del usuario.
+     * @return Respuesta con el token JWT si las credenciales son válidas, o un mensaje de error.
+     *
+     * @param request
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginDTOresponse> login(@RequestBody @Valid LoginDTO request) {
         Optional<User> userOptional = userServices.findUserByEmail(request.email());

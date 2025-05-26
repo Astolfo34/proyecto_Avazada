@@ -33,5 +33,5 @@ public interface UserServices {
     UserDetails loadUserByUsername(String email);
     Optional<User>findUserByEmail(String email);
 
-    // void registerNewUserAccount(@Valid RegisterRequest request);
+    Optional<User>findUserById(String id);
 }

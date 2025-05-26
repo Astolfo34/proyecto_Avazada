@@ -17,6 +17,7 @@ public record LocationDTO(
         @NotNull(message = "la longitud es requerida")
         @DecimalMin(value = "-180",inclusive = true, message = "la latitud debe ser mayor a -180")
         @DecimalMax(value = "180",inclusive = true, message = "la latitud debe ser menor a 180")
-        String longitud
+        String longitud,
+        String id
 ) {
 }
