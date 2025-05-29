@@ -1,12 +1,10 @@
 package com.uniquindio.sebas.guia5.controllers;
 
-import com.uniquindio.sebas.guia5.dtos.ActivateAccountRequest;
-import com.uniquindio.sebas.guia5.dtos.SuccesResponse;
-import com.uniquindio.sebas.guia5.dtos.UserRegistration;
-import com.uniquindio.sebas.guia5.dtos.UserResponse;
+import com.uniquindio.sebas.guia5.dtos.*;
 import com.uniquindio.sebas.guia5.services.UserServices;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -52,11 +50,18 @@ public class UserController {
             return ResponseEntity.notFound().build();  // 404 Not Found
         }
     }
+/*//-------------------------------------------------clavijo-------------------------------------
+    // 🔐 Login de usuario
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO request) {
+        Optional<UserResponse> user = userServices.loginUser(request.email(), request.password());
 
-    /*@PostMapping("v1/auth/activate") no estoy seguro si manejarlo desde el controlador de usuarios
-    public  ResponseEntity<SuccesResponse>ActivarCuentaUsuario(@RequestBody @Valid ActivateAccountRequest request){
-        userServices.activateUser(request.email(),request.activationCode());
-        return ResponseEntity.ok(new SuccesResponse("Cuenta activada con exito"));
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        }
     }*/
-
 }
+
+

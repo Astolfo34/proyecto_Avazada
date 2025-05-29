@@ -10,7 +10,7 @@ Content-Type: application/json
 ###Asumiendo que el login fue correcto porque es un usuario realmente inscrito en la BD
 POST http://localhost:8080/v1/reports
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODI0NDg2MCwiZXhwIjoxNzQ4MzMxMjYwfQ.KeSxKYUtn3OBt-aOBr80yVV3cgFu8S-KUT_6Sb4HVk8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODUwMjMxMywiZXhwIjoxNzQ4NTg4NzEzfQ.KpVVcufxxUq72VEXb7e1bF_cL8ghnSZ1HpiUIzZuvkU
 
 
 {

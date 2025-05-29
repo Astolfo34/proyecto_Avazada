@@ -157,4 +157,15 @@ public class UserServicesImpl implements UserServices{
         return userRepository.findById(id);
     }
 
+    //-------------------------clavijo-------------------------------------
+    /*public Optional<UserResponse> loginUser(String correo, String password) {
+        Optional<User> usuario = userRepository.findUserByEmail(correo);
+
+        if (usuario.isPresent() && usuario.get().getPassword().equals(password)) {
+            return Optional.of(convertToResponse(usuario.get()));
+        }
+
+        return Optional.empty();
+    }*/
+
 }

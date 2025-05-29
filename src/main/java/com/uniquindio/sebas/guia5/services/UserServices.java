@@ -34,4 +34,6 @@ public interface UserServices {
     Optional<User>findUserByEmail(String email);
 
     Optional<User>findUserById(String id);
+/*//------------------------clavijo-------------------------------------
+    Optional<UserResponse> loginUser(String email, String password);*/
 }
