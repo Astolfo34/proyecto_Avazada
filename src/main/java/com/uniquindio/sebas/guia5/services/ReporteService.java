@@ -1,6 +1,7 @@
 package com.uniquindio.sebas.guia5.services;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
+import com.uniquindio.sebas.guia5.dtos.CalificarImportanciaResponse;
 import com.uniquindio.sebas.guia5.dtos.ReportRequest;
 import com.uniquindio.sebas.guia5.dtos.ReportResponse;
 import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
@@ -25,6 +26,5 @@ public interface ReporteService {
 
     List<ReportResponse> listarReportesPorUsuario(String userId);
 
-
-
+    CalificarImportanciaResponse calificarImpReporte(String reporteId, String userEmail);
 }

@@ -1038,6 +1038,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/reports/{reportId}/calificar-importancia:
+    post:
+      tags:
+        - Reportes
+      summary: Incrementar contador de importancia
+      description: Aumenta en 1 el contador de importancia (corazones) de un reporte
+      operationId: incrementarImportancia
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: reporteId
+          in: path
+          description: ID del reporte
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Contador incrementado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportanciaResponse' #CalificarImportanciaResponse y request falta
+        '404':
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     UserRegistration:
@@ -1683,6 +1712,87 @@ components:
             $ref: '#/components/schemas/NotificationDTO'
         pageable: null
         totalPages: null
+    LoginRequest: # en back se llama LoginDTO
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del usuario
+          example: usuario@ejemplo.com
+        password:
+          type: string
+          format: password
+          description: Contraseña del usuario
+          example: "MiContraseñaSegura123"
+      example:
+        email: usuario@ejemplo.com
+        password: "MiContraseñaSegura123"
+    LoginResponse: #en back se llama LoginDTOresponse
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT para autenticación
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        tokenType:
+          type: string
+          description: Tipo de token
+          example: "Bearer"
+        expiresIn:
+          type: integer
+          description: Tiempo de expiración del token en segundos
+          example: 3600
+        user:
+          $ref: '#/components/schemas/UserInfo'
+      example:
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        tokenType: "Bearer"
+        expiresIn: 3600
+        user:
+          id: 123
+          email: usuario@ejemplo.com
+          name: "Juan Pérez"
+          roles: [ "USER" ]
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID del usuario
+          example: 123
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del usuario
+          example: usuario@ejemplo.com
+        name:
+          type: string
+          description: Nombre completo del usuario
+          example: "Juan Pérez"
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles del usuario
+          example: [ "USER" ]
+
+    ImportanciaResponse:
+      type: object
+      properties:
+        reporteId:
+          type: string
+          example: "507f1f77bcf86cd799439011"
+        nuevoContador:
+          type: integer
+          example: 5
+      example:
+        reporteId: "507f1f77bcf86cd799439011"
+        nuevoContador: 5
+
     ErrorResponse:
       type: object
       description: "Respuesta de error gen\xE9rica."

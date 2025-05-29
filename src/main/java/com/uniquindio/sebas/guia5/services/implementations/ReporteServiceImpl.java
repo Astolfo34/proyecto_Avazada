@@ -123,14 +123,31 @@ public class ReporteServiceImpl implements ReporteService {
 
     }
 
-    /*@Override
-    public List<ReportResponse> listarReportesPorEstado(EstadoReporte status){
-        return reporteRepository.findByEstadoReporte(status).stream()
-                .map(reporteMapper::toReportResponse)
-                .collect(Collectors.toList());
-    }*/
     private Reporte findReporteById (String idReporte){
         return reporteRepository.findById(idReporte)
                 .orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
     }
+
+    @Override
+    public CalificarImportanciaResponse calificarImpReporte (String reporteId , String userEmail) {
+        var optionalUser = userServices.findUserByEmail(userEmail);
+        if (optionalUser.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+
+        }
+        var user = optionalUser.get();
+        if (!user.isActivo()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuario inactivo");
+        }
+        Reporte reporteAux = reporteRepository.findById(reporteId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reporte no encontrado"));
+        reporteAux.setImportanceCount(reporteAux.getImportanceCount()+1);
+        reporteRepository.save(reporteAux);
+        return  new CalificarImportanciaResponse(
+                reporteId,
+                reporteAux.getImportanceCount(),
+                "Importancia del reporte actualizada correctamente"
+        );
+    }
+
 }

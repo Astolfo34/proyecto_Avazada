@@ -1,0 +1,30 @@
+### Una vez recibido el codigo al correo y haber activado la cuenta, LOguearse, y sabiendo el id de un reporte existente
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "jsebasdroid31@gmail.com",
+  "password": "12345aBc"
+}
+
+> {%
+    // Script para guardar el token automáticamente
+    client.test("Login exitoso", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.token, "No se recibió token en la respuesta");
+    });
+    client.global.set("auth_token", response.body.token);
+%}
+
+### 2. Calificar un reporte existente (usando el token obtenido), los datos se toman del token y url. no se necesita body
+POST http://localhost:8080/v1/reports/d2e77ecb-d719-474f-822f-d9cc5f4f1ed8/calificar-importancia
+Authorization: Bearer {{auth_token}}
+
+> {%
+    // Tests para la respuesta
+    client.test("Calificación exitosa", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.reporteId === "d2e77ecb-d719-474f-822f-d9cc5f4f1ed8", "ID de reporte no coincide");
+        client.assert(typeof response.body.nuevoContadorImportancia === "number", "El contador no es un número");
+    });
+%}
