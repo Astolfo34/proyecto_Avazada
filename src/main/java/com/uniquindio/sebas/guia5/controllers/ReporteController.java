@@ -1,15 +1,14 @@
 package com.uniquindio.sebas.guia5.controllers;
 
 import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
-import com.uniquindio.sebas.guia5.dtos.ReportRequest;
-import com.uniquindio.sebas.guia5.dtos.ReportResponse;
-import com.uniquindio.sebas.guia5.dtos.ReporteDTO;
+import com.uniquindio.sebas.guia5.dtos.*;
 import com.uniquindio.sebas.guia5.exceptions.ValueConflictExceptions;
 import com.uniquindio.sebas.guia5.services.ReporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +35,20 @@ public class ReporteController {
             } /*catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Error 500
             }*/
+
+    }
+
+    @PostMapping("/{reportId}/calificar-importancia")
+    public ResponseEntity<CalificarImportanciaResponse> calificarImportancia
+            (@PathVariable String reportId) {
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            CalificarImportanciaResponse response = reporteService.calificarImpReporte(reportId,userEmail);
+            return  ResponseEntity.ok(response);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400
+        }
 
     }
 

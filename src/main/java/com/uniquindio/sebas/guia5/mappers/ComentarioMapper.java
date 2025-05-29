@@ -21,8 +21,8 @@ public interface ComentarioMapper {
     Comentario toEntity(ComentarioRequest dto);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "fechaPublication", expression = "java(LocalDate.now())")
-    @Mapping(target = "creadorId", ignore = true)
+    @Mapping(target = "fechaPublication", source = "fechaPublication")
+    @Mapping(target = "creadorId", source = "creadorId")
     @Mapping(target = "reporteId", source = "reporteId")
     @Mapping(target = "contenido_comentario", source = "contenido_comentario")
     //De entidad a DTO

@@ -11,15 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 public record ComentarioRequest(
-        /*@NotNull(message = "el id del creador del comentario es requerido")
-        String creadorId,
-        @NotNull(message = "el id del reporte del comentario es requerido")
-        String reporteId,*/
+        @NotNull(message = "el contenido es requerido")
         @Size(min = 5, max = 500, message = "máximo 500 caracteres en el cometario")
         String contenido_comentario
-        /*@NotNull(message = "es necesaria la fecha de creación del comentario")
-        @PastOrPresent(message = "La Fecha no puede ser furura. no tiene sentido")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        LocalDate fechaPublication*/
+
 ) {}
