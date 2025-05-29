@@ -86,8 +86,70 @@ public class DataSeeder implements CommandLineRunner {
         userRepository.saveAll(List.of(ana, sebas));
 
         // creando reportes
-        Reporte incendio = new Reporte();*/
+        Reporte incendio = new Reporte(
+                null, // id (Mongo lo genera)
+                "Incendio en biblioteca", // title
+                List.of(desastreNatural), // categories (usa una lista de categorías existentes)
+                new Location(null,4.7110, -74.0721), // location (ajusta según tu clase Location)
+                "https://img.com/incendio.jpg", // imageUrl
+                LocalDate.now(), // createdAt
+                "Se está quemando la biblioteca escolar", // content
+                ana.getId(), // userId (id del usuario que reporta)
+                LocalDate.of(2024, 5, 26), // occurrenceDate
+                EstadoReporte.EN_PROCESO, // status (ajusta según tu enum)
+                List.of(), // listComments (puedes pasar una lista vacía)
+                0 // importanceCount
+        );
+        Reporte accidenteVehicular = new Reporte(
+                null, // id (Mongo lo genera)
+                "Accidente en la autopista", // title
+                List.of(incidenteVial), // categories (usa una lista de categorías existentes)
+                new Location(null,4.7110, -74.0721), // location (ajusta según tu clase Location)
+                "https://img.com/accidente.jpg", // imageUrl
+                LocalDate.now(), // createdAt
+                "Un vehículo se volcó en la autopista", // content
+                sebas.getId(), // userId (id del usuario que reporta)
+                LocalDate.of(2024, 5, 26), // occurrenceDate
+                EstadoReporte.PENDIENTE, // status (ajusta según tu enum)
+                List.of(), // listComments (puedes pasar una lista vacía)
+                0 // importanceCount
+        );
+        Reporte roboCasa = new Reporte(
+                null, // id (Mongo lo genera)
+                "Robo en casa", // title
+                List.of(robo), // categories (usa una lista de categorías existentes)
+                new Location(null,4.7110, -74.0721), // location (ajusta según tu clase Location)
+                "https://img.com/robo.jpg", // imageUrl
+                LocalDate.now(), // createdAt
+                "Se reporta un robo en una vivienda", // content
+                ana.getId(), // userId (id del usuario que reporta)
+                LocalDate.of(2024, 5, 26), // occurrenceDate
+                EstadoReporte.CERRADO, // status (ajusta según tu enum)
+                List.of(), // listComments (puedes pasar una lista vacía)
+                0 // importanceCount
+        );
+        // Guardar los reportes en la base de datos
+        reporteRepository.saveAll(List.of(incendio, accidenteVehicular, roboCasa));
 
+        // creando comentarios
+        Comentario comentarioRoboCasa = new Comentario(
+                null, // id (Mongo lo genera)
+                sebas.getId(), // creadorId (id del usuario que comenta)
+                roboCasa.getId(), // reporteId (id del reporte al que pertenece el comentario)
+                "Yo vi a alguien sospechoso subir a un auto rojo a esa hora por ese lugar", // contenido_comentario
+                LocalDate.now() // fechaPublication
+        );
+        Comentario comentarioIncendio = new Comentario(
+                null, // id (Mongo lo genera)
+                ana.getId(), // creadorId (id del usuario que comenta)
+                incendio.getId(), // reporteId (id del reporte al que pertenece el comentario)
+                "¿Alguien sabe si ya llegaron los bomberos?", // contenido_comentario
+                LocalDate.now() // fechaPublication
+        );
+
+        // Guardar los comentarios en la base de datos
+        comentarioRepository.saveAll(List.of(comentarioRoboCasa, comentarioIncendio));
+*/
     }
 
 }

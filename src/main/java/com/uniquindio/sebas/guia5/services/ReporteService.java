@@ -16,7 +16,7 @@ public interface ReporteService {
 
     ReportResponse crearReporte(ReportRequest reporteDTO);
 
-    ReportResponse actualizarReporte(String userId,ReportRequest reporteDTO);
+    ReportResponse actualizarReporte(String reportId,ReportRequest reporteDTO);
 
     void eliminarReporte(String idReporte);
 

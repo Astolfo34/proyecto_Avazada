@@ -1,4 +1,4 @@
-### Una vez recibido el codigo al correo y haber activado la cuenta, LOguearse
+### LOGIN - Obtener token JWT y guardarlo como variable
 POST http://localhost:8080/v1/auth/login
 Content-Type: application/json
 
@@ -7,24 +7,29 @@ Content-Type: application/json
   "password": "12345aBc"
 }
 
-###Asumiendo que el login fue correcto porque es un usuario realmente inscrito en la BD
+> {%
+    // Extraer y guardar el token en la variable global 'jwtToken'
+    const json = await response.json();
+    client.global.set("jwtToken", json.token);
+%}
+
+###
+
+### CREAR REPORTE usando el token guardado
 POST http://localhost:8080/v1/reports
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODUxNDE1MywiZXhwIjoxNzQ4NjAwNTUzfQ.ck0HWO3B3c8Ks6utOg3F83P5UkCXKb5gG4ykfb2xnEk
-
+Authorization: Bearer {{jwtToken}}
 
 {
   "title": "incendio en biblioteca",
   "contenido": "se esta quemando la biblioteca escolar",
   "image": "https://sources.com/img1.jpg",
   "location": {
-
     "latitud": 4.7110,
     "longitud": -74.0721
   },
   "categories": [
     {
-
       "description": "fuego",
       "name": "imprevisto"
     }
@@ -32,23 +37,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsL
   "fechaSuceso": "2025-05-11"
 }
 
-### Asumiendo que el reporte fue creado correctamente,se prueba el PUT
+###
+
+### ACTUALIZAR REPORTE (PUT) usando el mismo token
 PUT http://localhost:8080/v1/reports/095df97b-b2d7-42cc-ae6a-60bc1ce30323
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODUxNDE1MywiZXhwIjoxNzQ4NjAwNTUzfQ.ck0HWO3B3c8Ks6utOg3F83P5UkCXKb5gG4ykfb2xnEk
+Authorization: Bearer {{jwtToken}}
 
 {
   "title": "incendio en biblioteca",
   "contenido": "se esta quemando la biblioteca UNIVERSITARIA JAPONESA",
   "image": "https://sources.com/img1.jpg",
   "location": {
-
     "latitud": 4.7110,
     "longitud": -74.0721
   },
   "categories": [
     {
-
       "description": "fuego",
       "name": "imprevisto"
     }
@@ -56,8 +61,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsL
   "fechaSuceso": "2025-05-11"
 }
 
-### Asumiendo que el reporte fue actualizado correctamente, se prueba el DELETE
+###
+
+### ELIMINAR REPORTE (DELETE) usando el mismo token
 DELETE http://localhost:8080/v1/reports/095df97b-b2d7-42cc-ae6a-60bc1ce30323
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc2ViYXNkcm9pZDMxQGdtYWlsLmNvbSIsImlhdCI6MTc0ODUxNDE1MywiZXhwIjoxNzQ4NjAwNTUzfQ.ck0HWO3B3c8Ks6utOg3F83P5UkCXKb5gG4ykfb2xnEk
-
+Authorization: Bearer {{jwtToken}}

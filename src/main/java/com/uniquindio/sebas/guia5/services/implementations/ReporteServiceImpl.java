@@ -1,12 +1,13 @@
 package com.uniquindio.sebas.guia5.services.implementations;
 
-import com.uniquindio.sebas.guia5.doamin.EstadoReporte;
-import com.uniquindio.sebas.guia5.doamin.Reporte;
-import com.uniquindio.sebas.guia5.doamin.User;
+import com.uniquindio.sebas.guia5.doamin.*;
 import com.uniquindio.sebas.guia5.dtos.*;
 import com.uniquindio.sebas.guia5.exceptions.ValueConflictExceptions;
+import com.uniquindio.sebas.guia5.mappers.NotificacionMapper;
 import com.uniquindio.sebas.guia5.mappers.ReporteMapper;
+import com.uniquindio.sebas.guia5.repository.NotificacionRepository;
 import com.uniquindio.sebas.guia5.repository.ReporteRepository;
+import com.uniquindio.sebas.guia5.services.NotificacionService;
 import com.uniquindio.sebas.guia5.services.ReporteService;
 import com.uniquindio.sebas.guia5.services.UserServices;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class ReporteServiceImpl implements ReporteService {
     private final ReporteRepository reporteRepository;
     private final ReporteMapper reporteMapper;
     private final UserServices userServices;
+    /*private final NotificacionRepository notificacionRepository;
+    private final NotificacionService notificacionService;
+    private final NotificacionMapper notificacionMapper;*/
 
     @Override
     public ReportResponse crearReporte(ReportRequest reporte) {
@@ -71,6 +76,17 @@ public class ReporteServiceImpl implements ReporteService {
             // 5. Guardar el reporte
             var newReporte = reporteMapper.parseOf(reporteConUser);
             var reporteGuardado = reporteRepository.save(newReporte);
+            /*// notificar al admin que se ha creado el reporte
+            var notificacion = new NotificationDTO(
+                    java.util.UUID.randomUUID().toString(),
+                    TipoNotificacion.NEW_NEARBY_REPORT,
+                    "Nuevo reporte creado cerca de tu ubicación",
+                    LocalDate.of(2025,3,7).toString(),
+                    false
+            );
+            Notificacion notificacionGuardada = notificacionMapper.toEntity(notificacion);
+            notificacionRepository.save(notificacionGuardada);
+            notificacionService.notificarAdministradores(notificacionGuardada.getMensaje());*/
             return reporteMapper.toReportResponse(reporteGuardado);
         }catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +100,8 @@ public class ReporteServiceImpl implements ReporteService {
         //verificamos existencia
         var reporteActual = findReporteById(id);
         // actualizar datos
-        reporteActual.setImportanceCount(Integer.parseInt(reportRequest.title()));
+        reporteActual.setTitle(reportRequest.title());
+        reporteActual.setImportanceCount(0); //CAMBIAR ESTO POR UN VALOR QUE SE RECIBA EN EL DTO
         reporteActual.setContent(reportRequest.contenido());
         reporteActual.setLocation(reportRequest.location());
         reporteActual.setStatus(reportRequest.status());
